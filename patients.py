@@ -29,8 +29,19 @@ class patient:
         self.cursor_object.execute(query)
 
     def register(self,**patient_info):
+        # This function adds patients details to the patient list and creates a personal table to track patients medical history 
         query="""
         INSERT INTO patient_list
         (patient_id,patient_name,phone_no,blood_group,initial_diagnostic,doctor_name)
         """
-        self.cursor_object.execute()
+        self.cursor_object.execute(query)
+        self._patient_personal(patient_name[name])
+
+    def medical_history(self,patient_name):
+        # This function uses patients personal table to show their medical history.
+        query="""
+        SELECT * FROM {patient_name}
+        """
+        self.cursor_object.execute(query)
+        patient_history=self.cursor_object
+        return patient_history
