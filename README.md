@@ -7,6 +7,8 @@ Features: 1.User Managment(hospital staff)
           4.Good graphical User Interface
           5.Cloud File Managment(if possible)
 
+Future Updates:
+                a.Table can be arranged in for a single medicine and its dosage changes per session
 -------------------------------------------------------------------Feature Description----------------------------------------------------------
 2.Patient Managment:
     requirements: a.should contain pesonal details(patient id,name,address,health diagnostic info) 
@@ -28,7 +30,8 @@ Features: 1.User Managment(hospital staff)
                             Fields:
                                 *name           *address
                                 *phone no       *date_of_birth
-                                *blood group    *first_session_result
+                                *blood group    *Initial_diagnostics
+                                *Doctor_name
        
                             -------------------------------------------
                             Behaviours:
@@ -37,6 +40,6 @@ Features: 1.User Managment(hospital staff)
                                 *Medications      *_create_table
                                 *Treatment        *_orgnize
 
-
+    
 
 ...................................................................
