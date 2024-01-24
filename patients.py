@@ -1,6 +1,6 @@
 import mysql.connector
 
-class patient:
+class Patient:
     def __init__(self,cursor_object):
         self.cursor_object=cursor_object
     
@@ -27,15 +27,20 @@ class patient:
         (table_name,date,diagnostic,medications,treatment,check_up);
         """
         self.cursor_object.execute(query)
+        self.cursor_object.commit()
 
     def register(self,**patient_info):
         # This function adds patients details to the patient list and creates a personal table to track patients medical history 
-        query="""
+        query=f"""
         INSERT INTO patient_list
-        (patient_id,patient_name,phone_no,blood_group,initial_diagnostic,doctor_name)
+        (patient_id,patient_name,patient_DOB,phone_no,blood_group,initial_diagnostic,doctor_name)
+        VALUES
+        ({patient_info['name']},{patient_info['DOB']},{patient_info['phone no']},{patient_info['blood group']},{patient_info['intial diagnostic'],{patient_info['doctor name']}}
+        
         """
         self.cursor_object.execute(query)
-        self._patient_personal(patient_name[name])
+        self._patient_personal(patient_info["name"])
+        self.cursor_object.commit()
 
     def medical_history(self,patient_name):
         # This function uses patients personal table to show their medical history.
@@ -45,3 +50,22 @@ class patient:
         self.cursor_object.execute(query)
         patient_history=self.cursor_object
         return patient_history
+
+
+
+
+if __name__=='__main__':
+    Database=mysql.connector.connect(host="localhost",
+                                     user="root",
+                                     passwd="admin",
+                                     auth_plugin='mysql_native_password',
+                                     database="test")
+    cursorobj=Database.cursor()
+    patient=Patient(cursorobj)
+    patient_info={"name":"","DOB":"","phone no":"",'blood_group':"","intial diagnostic":"",
+                  'doctor name':''}
+    for i in patient_info:
+        print(f"Enter {i} of patient")
+        patient_info[i]=input()
+    
+    patient.register(**patient_info)
