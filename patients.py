@@ -12,8 +12,8 @@ class patient:
             medications VARCHAR(1000),
             treatment VARCHAR(1000),
             check_Up DATE,
-            diagnos_report VARCHAR(1000),
-            diagnos_keypoints VARCHAR(100)
+            test_report VARCHAR(1000),
+            test_keypoints VARCHAR(100)
             );
 
          """
@@ -36,38 +36,29 @@ class patient:
         # This function adds patients details to the patient list and creates a personal table to track patients medical history 
         query="""
         INSERT INTO patient_list
-<<<<<<< Updated upstream
-        (patient_id,patient_name,phone_no,blood_group,initial_diagnostic,doctor_name)
-=======
         (patient_id,patient_name,patient_DOB,phone_no,blood_group,initial_diagnostic,doctor_name)
         VALUES
         ({patient_info['name']},{patient_info['DOB']},{patient_info['phone no']},{patient_info['blood group']},{patient_info['intial diagnostic']},{patient_info['doctor name']}
         );
->>>>>>> Stashed changes
         """
         self.cursor_object.execute(query)
-        self._patient_personal(patient_name[name])
+        self._patient_personal(patient_info['name'])
 
     def medical_history(self,patient_name):
         # This function uses patients personal table to show their medical history.
-        query="""
+        query=f"""
         SELECT * FROM {patient_name}
         """
         self.cursor_object.execute(query)
         patient_history=self.cursor_object
         return patient_history
-<<<<<<< Updated upstream
-=======
     
     def add_diagnos_result(self,**data):
         query=f"""
-        INSERT INTO patient_list
-        (patient_id,patient_name,patient_DOB,phone_no,blood_group,initial_diagnostic,doctor_name)
-        VALUES
-        ({data['name']},{patient_info['DOB']},{patient_info['phone no']},{patient_info['blood group']},{patient_info['intial diagnostic']},{patient_info['doctor name']}
-        );
+        INSERT INTO {data['patient name']}
         """
-        pass
+    
+    def get_
 
 
 
@@ -88,4 +79,3 @@ if __name__=='__main__':
         patient_info[i]=input()
     
     patient.register(**patient_info)
->>>>>>> Stashed changes

@@ -1,8 +1,14 @@
+import json
+
+path="credentials.json"
+with open(path) as obj:
+    cred=obj.load(obj)["cred"]
+
+
 def first_setup(cursor_object,hosptal_name):
     """
     This function runs at the start of the software and is executed only once for setting up the initial database.
     """
-    READY=False
     query=f"""
     CREATE DATABASE IF NOT EXIST {hosptal_name}
     """
