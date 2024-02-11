@@ -16,8 +16,9 @@ def first_setup(cursor_object,hosptal_name):
 
     query2="""
     CREATE TABLE IF NOT EXIST patient_list(
-    patient_id INT PRIMERY KEY,
+    patient_id INT PRIMERY KEY AUTO_INCREMENT,
     patient_name VARCHAR(50),
+    patent_DOB DATE,
     phone_no INT,
     blood_group VARCHAR(3),
     patient_adderess VARCHAR(100),
@@ -28,4 +29,6 @@ def first_setup(cursor_object,hosptal_name):
     cursor_object.execute(query2)
 
 
-    
+
+def logout(cursor_object):
+    cursor_object.close()
