@@ -11,9 +11,7 @@ class Patient:
             session_diagnostic VARCHAR(10000) NOT NULL,
             medications VARCHAR(1000),
             treatment VARCHAR(1000),
-            check_Up DATE,
-            test_report VARCHAR(1000),
-            test_keypoints VARCHAR(100)
+            check_Up DATE
             );
 
          """
@@ -21,14 +19,12 @@ class Patient:
 
         
 
-    def session_result(self,**data):
-        result=result
-        query=f"""
-        INSERT INTO {data['name']}
-        (session_date,session_diagnostic,medications,treatment,check_up,diagnos_report,diagnos_keypoints)
+    def session_result(self,patient_name,date,diagnostic,medications,treatment,check_Up):
+        query="""
+        INSERT INTO {patient_name}
+        (session_date,session_diagnostic,medivations,treatment)
         VALUES
-        ({result['date']},{result['diagnostic']},{result['medication']},
-        );
+        (table_name,date,diagnostic,medications,treatment,check_up);
         """
         self.cursor_object.execute(query)
         self.cursor_object.commit()
@@ -43,43 +39,17 @@ class Patient:
         
         """
         self.cursor_object.execute(query)
-        self._patient_personal(patient_name[name])
+        self._patient_personal(patient_info["name"])
+        self.cursor_object.commit()
 
     def medical_history(self,patient_name):
         # This function uses patients personal table to show their medical history.
-        query=f"""
+        query="""
         SELECT * FROM {patient_name}
         """
         self.cursor_object.execute(query)
         patient_history=self.cursor_object
         return patient_history
-    
-    def add_diagnos_result(self,**data):
-        query=f"""
-        INSERT INTO {data['patient name']}
-        """
-    
-    
-
-
-
-
-
-if __name__=='__main__':
-    Database=mysql.connector.connect(host="localhost",
-                                     user="root",
-                                     passwd="admin",
-                                     auth_plugin='mysql_native_password',
-                                     database="test")
-    cursorobj=Database.cursor()
-    patient=Patient(cursorobj)
-    patient_info={"name":"","DOB":"","phone no":"",'blood_group':"","intial diagnostic":"",
-                  'doctor name':''}
-    for i in patient_info:
-        print(f"Enter {i} of patient")
-        patient_info[i]=input()
-    
-    patient.register(**patient_info)
 
 
 
