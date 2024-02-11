@@ -107,8 +107,65 @@ class User:
 
    #----------------------- Patient related authorities ----------------------------------------------------------------------- 
     
+    
+    def add_diagnostic(self):
+        if self.authority['add_diagnostic']:
+            raise NotImplemented('The method is not implimented by the child class')
+        else:
+            raise NotAuthorized('User is not authorized to use this method.')
+    
+    def add_session_report(self):
+        if self.authority['add_session_report']:
+            raise NotImplemented('The method is not implimented by the child class')
+        else:
+            raise NotAuthorized('User is not authorized to use this method.')
+    
+    def conclude_treatment(self):
+        if self.authority['conclude_treatment']:
+            raise NotImplemented('The method is not implimented by the child class')
+        else:
+            raise NotAuthorized('User is not authorized to use this method.')
+        
+    
+    def register_patient(self):
+        if self.authority['register_patient']:
+            raise NotImplemented('The method is not implimented by the child class')
+        else:
+            raise NotAuthorized('User is not authorized to use this method.')
+        
+    
+    def view_medical_history(self):
+        if self.authority['view_medical_history']:
+            raise NotImplemented('The method is not implimented by the child class')
+        else:
+            raise NotAuthorized('User is not authorized to use this method.')
+        
+    def edit_patient_details(self):
+        if self.authority['edit_patient_details']:
+            raise NotImplemented('The method is not implimented by the child class')
+        else:
+            raise NotAuthorized('User is not authorized to use this method.')
+    
+    def patient_list(self):
+        if self.authority['register_patient']:
+            raise NotImplemented('The method is not implimented by the child class')
+        else:
+            raise NotAuthorized('User is not authorized to use this method.')
+    
+#--------------------User adapted class-------------------------------------------------------------------------------------
+        
+class Doctor(User):
+    def __init__(self):
+        super().__init__()
+        self.authority['add_session_report']=True
+    
+
+
+
+
+
 
 if __name__=='__main__':
-    user=User()
-    user.add_doctor()
+    user=Doctor()
+    user.add_session_report()
 
