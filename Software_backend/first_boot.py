@@ -1,20 +1,26 @@
-import json
+"""
+This file is for getting software ready with creating a database,cloud.
+"""
+from . import cursor_object
 
-path="credentials.json"
-with open(path) as obj:
-    cred=obj.load(obj)["cred"]
 
 
-def first_setup(cursor_object,hosptal_name):
+def create_database(cursor_object,hospital_name):
     """
     This function runs at the start of the software and is executed only once for setting up the initial database.
     """
+    
     query=f"""
-    CREATE DATABASE IF NOT EXIST {hosptal_name}
+    CREATE DATABASE IF NOT EXIST {hospital_name}
     """
     cursor_object.execute(query)
+    
+    query2=f"""
+    USE DATABASE {hospital_name}
+    """
+    cursor_object.execute(query2)
 
-    query2="""
+    query3="""
     CREATE TABLE IF NOT EXIST patient_list(
     patient_id INT PRIMERY KEY AUTO_INCREMENT,
     patient_name VARCHAR(50),
@@ -26,9 +32,9 @@ def first_setup(cursor_object,hosptal_name):
     doctor_name VARCHAR(50)
     );
     """
-    cursor_object.execute(query2)
+    cursor_object.execute(query3)
 
 
+def start_boot(hospital_name):
+    create_database(cursor_object,hospital_name)
 
-def logout(cursor_object):
-    cursor_object.close()

@@ -1,4 +1,5 @@
-from projectExceptions import NotAuthorized
+from Software_Logic.projectExceptions import NotAuthorized
+from Software_Logic.patients import *
 
 class User:
     """
@@ -155,9 +156,21 @@ class User:
 #--------------------User adapted class-------------------------------------------------------------------------------------
         
 class Doctor(User):
-    def __init__(self):
+    def __init__(self,patient_object):
         super().__init__()
+        self.patient_object=patient_object
         self.authority['add_session_report']=True
+    
+    def add_session_report(self,name,s_result,medications,treatment):
+        data={
+            "session_diagnostic":s_result,
+            "medication":medications,
+            "treatment":treatment
+        }
+
+        self.patient_object.session_result(name,data)
+    
+
     
 
 

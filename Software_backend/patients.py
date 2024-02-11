@@ -19,12 +19,12 @@ class Patient:
 
         
 
-    def session_result(self,patient_name,date,diagnostic,medications,treatment,check_Up):
-        query="""
+    def session_result(self,patient_name,**data):
+        query=f"""
         INSERT INTO {patient_name}
-        (session_date,session_diagnostic,medivations,treatment)
+        (session_date,session_diagnostic,medications,treatment)
         VALUES
-        (table_name,date,diagnostic,medications,treatment,check_up);
+        ({data['session_date']},{data['med']},diagnostic,medications,treatment,check_up);
         """
         self.cursor_object.execute(query)
         self.cursor_object.commit()
