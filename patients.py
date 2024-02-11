@@ -58,7 +58,7 @@ class patient:
         INSERT INTO {data['patient name']}
         """
     
-    def get_
+    
 
 
 
