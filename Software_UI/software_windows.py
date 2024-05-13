@@ -20,18 +20,18 @@ class Window:
     def __init__(self):
         pass
 
-    def create_window(self):
+    def _create_window(self):
         root =Tk()
         root.title('Astra Hospital Management')
         return root
 
     #--------------------window with different sizes------------------------------
     def normal_window(self):
-        root_object=self.create_window()
+        self.root_object=self._create_window()
         width=1080
         height=720
         self.root_object.geometry(f'{width}x{height}')
-        return root_object
+        return self.root_object
 
 
    
