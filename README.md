@@ -1,5 +1,5 @@
 Project : Astra v1
-Aim : A Medical software to manage hospital staff and services.
+Aim : A Medical software to manage hospital staff and hospital services.
 
 Features: 1.User Managment(hospital staff)
           2.Patient Management(patients personal detials,Medications,Session Outcome)
@@ -10,6 +10,15 @@ Features: 1.User Managment(hospital staff)
 Future Updates:
                 a.Table can be arranged in for a single medicine and its dosage changes per session
 -------------------------------------------------------------------Feature Description----------------------------------------------------------
+1.User Managment:
+    requirements: a.Every staff should be access all patients from the database.
+                  b.Every staff should be able to access only the specific amount of data about the patient related to the work of the staff.
+                  c.From the same login interface for every user, based on the user new dashboard.
+                   
+
+
+********************************************************************
+
 2.Patient Managment:
     requirements: a.should contain pesonal details(patient id,name,address,health diagnostic info) 
                   b.able to be used by multiple hospital staff(doctor booking by front desk,health report edited by doctors,
@@ -42,4 +51,4 @@ Future Updates:
 
     
 
-...................................................................
+....................................................................................................................................

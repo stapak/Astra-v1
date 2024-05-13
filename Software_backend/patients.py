@@ -44,12 +44,13 @@ class Patient:
 
     def medical_history(self,patient_name):
         # This function uses patients personal table to show their medical history.
-        query="""
+        query=f"""
         SELECT * FROM {patient_name}
         """
         self.cursor_object.execute(query)
         patient_history=self.cursor_object
         return patient_history
+
 
 
 

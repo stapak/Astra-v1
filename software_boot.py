@@ -2,25 +2,24 @@
 This file is used to start the software.
 """
 
+# Built in liabraries.
 import json
-from Software_backend.first_boot import start_boot
+import mysql.connector
 
-path="boot_info.json"
-with open(path) as file:
-    boot_info=json.load(file)['first_boot']
-
-def start(hospital_name=None):
-    if  not boot_info['DBMS_ready']:
-        start_boot(hospital_name)
-        boot_info['DBMS_ready']=True
-        print('hi',boot_info['DBMS_ready'])
-        with open(path,'w') as file:
-            json.dump(boot_info,file)
-    
-    else:
-        print('hello',boot_info['DBMS_ready'])
+# Created Modules.
+from Software_backend.software_setup import start_boot
 
 
-   
+# the variable username and password will be shared later.
+user_name=user_name
+password=password
+
+
+
+def create_cursor_object(user_name,password,DB_name,host_address):
+    db=mysql.connector.connect(host=host_address,user=user_name,passwd=password,database=DB_name)
+    cusor_object=db.cursor()
+    return cusor_object
+
 
 

@@ -1,5 +1,5 @@
-from Software_Logic.projectExceptions import NotAuthorized
-from Software_Logic.patients import *
+from projectExceptions import NotAuthorized,UserDetailsNotFound,TreatmentComplete
+from patients import *
 
 class User:
     """
@@ -21,8 +21,8 @@ class User:
             "add_diagnostic_center":False,
             "remove_diagnostic_center":False,
 
-            "add_pharmacists":False,
-            "remove_pharmacists":False,
+            "add_pharmacy":False,
+            "remove_pharmacy":False,
 
             # authority to Edit patients data
             "add_diagnostic":False,
@@ -32,10 +32,7 @@ class User:
             "view_medical_history":False,
             "edit_patient_details":False,
             "patient_list":False
-
-            
         }
-
 
     #-----------------------User related authorities----------------------------------------------------------------------- 
     def add_tech_support(self):
@@ -153,13 +150,50 @@ class User:
         else:
             raise NotAuthorized('User is not authorized to use this method.')
     
-#--------------------User adapted class-------------------------------------------------------------------------------------
+#--------------------User child class-------------------------------------------------------------------------------------
+        
+
+class Head(User):
+    def __init__(self,cursor_object,name):
+        super().__init__()
+        self.cursor_object=cursor_object
+        self.authority['add_tech_support']=True
+        self.authority['remove_tech_support']=True
+        
+        self.authority['add_doctor']=True
+        self.authority['remove_doctor']=True
+        
+        self.authority['add_receptionist']=True
+        self.authority['remove_receptionist']=True
+
+        self.authority['add_diagnostic']=True
+        self.authority['remove_diagnostic']=True
+
+        self.authority['add_pharmacy']=True
+        self.authority['remove_pharmacy']=True
+        
+        #----------- User Object address initialization---------------------------------------------------------------------
+        query=f"""
+        SELECT * FROM user_table
+        WHERE user_name = {name};
+        """
+        self.cursor_object.execute(query)
+        user_details={}
+        raw_data=self.cursor_object
+        
+    
+        
+
+
         
 class Doctor(User):
-    def __init__(self,patient_object):
+    def __init__(self,cursor_object,patient_object):
         super().__init__()
+        
         self.patient_object=patient_object
         self.authority['add_session_report']=True
+        self.cursor_object=cursor_object
+
     
     def add_session_report(self,name,s_result,medications,treatment):
         data={
@@ -168,7 +202,16 @@ class Doctor(User):
             "treatment":treatment
         }
 
+
+
         self.patient_object.session_result(name,data)
+
+
+    def conclude_treatment(self):
+        pass
+
+    
+    
     
 
     
@@ -178,7 +221,4 @@ class Doctor(User):
 
 
 
-if __name__=='__main__':
-    user=Doctor()
-    user.add_session_report()
 
