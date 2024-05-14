@@ -7,6 +7,7 @@ This File contain window related settings.
 
 
 from tkinter import *
+from tkinter import PhotoImage
 import json
 import os
 import time
@@ -28,9 +29,11 @@ class Window:
     #--------------------window with different sizes------------------------------
     def normal_window(self):
         self.root_object=self._create_window()
-        width=1080
-        height=720
+        width=1920
+        height=1080
         self.root_object.geometry(f'{width}x{height}')
+        window_icon=PhotoImage(file='E:\Mini Project\Astra v1\Software_UI\software_icon.png')
+        self.root_object.iconphoto(False,window_icon)
         return self.root_object
 
 
@@ -46,6 +49,6 @@ if __name__=='__main__':
       
       window_root=Window()
       window_root.start_window()
-      window_root.start_window()
+      
       
       
