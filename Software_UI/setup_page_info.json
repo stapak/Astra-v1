@@ -1,7 +1,12 @@
 {
     "welcome_greeting":{
         "first_page":"Thank you for selecting us, we can together create a safe and trustable health chain.",
-        "terms and condition":"This is the property of the Astra softwares and you are not allowed to createcopy of the software in any way, such violation of any property will be offensable and considered as a crime."
+        "terms and condition":[
+                                "This is the property of the Astra softwares",
+                                " and you are not allowed to createcopy of the",
+                                "software in any way, such violation of any property", 
+                                "will be offensable and considered as a crime."
+                              ]
         
     }
 }

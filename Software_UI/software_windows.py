@@ -58,7 +58,8 @@ class Window:
 if __name__=='__main__':
       
       window_root=Window()
-      window_root=window_root.setup_window()
+      #window_root=window_root.setup_window()
+      window_root=window_root.normal_window()
       window_root.mainloop()
       
       

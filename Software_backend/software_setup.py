@@ -1,7 +1,6 @@
 """
 This file is for getting software ready with creating a database,cloud.
 """
-from . import cursor_object
 
 
 

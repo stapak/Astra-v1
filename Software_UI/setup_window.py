@@ -14,9 +14,9 @@ import tkinter as tk
 from tkinter import Listbox
 from tkinter import IntVar
 
-
-from tkinter.ttk import Checkbutton
-from tkinter.ttk import Entry
+from tkinter.ttk import Label as Label2
+from tkinter.ttk import Checkbutton as Checkbutton2
+from tkinter.ttk import Entry as Entry2
 from tkinter.ttk import Scrollbar as Scrollbar2
 
 from PIL import Image,ImageTk
@@ -112,14 +112,11 @@ class Terms_condition_page(Frame):
 
         scroll_bar_object.config(command=terms_and_condition_listbox.yview)
 
-        """
-        tc=setup_info["terms and condition"]
-        tc=tc.split(" ")
-
+        tc=setup_info["terms and condition"]        
         for i in tc:
-            terms_and_condition_listbox.insert(END,i)
+            terms_and_condition_listbox.insert(tk.END,i)
 
-        """
+        
         #----------------------fucntion to change button state-----------------------------------------------
         check_var=IntVar()
         
@@ -129,14 +126,8 @@ class Terms_condition_page(Frame):
                 next_button.config(state=tk.ACTIVE)                
             else:
                 next_button.config(state=tk.DISABLED)
-        """
-        def change_state():
-            if check_var.get()== 1:
-                print("button working.")
-
-        """
         
-        agreeing_checkbutton=Checkbutton(TC_detailed_frame,text="I agree to the condition",onvalue=1,
+        agreeing_checkbutton=Checkbutton2(TC_detailed_frame,text="I agree to the condition",onvalue=1,
                                           offvalue=0,variable=check_var,command=change_state)
         agreeing_checkbutton.place(y=260,x=10)
 
@@ -155,11 +146,52 @@ class Terms_condition_page(Frame):
 class Software_activation_page(Frame):
     """
     This is class is used to enter the license key and verify the key.
+    This frame is devided into 2 parts one for entering the key and another for button
     """
     def __init__(self,window_object):
         self.window_oject=window_object
         super().__init__(window_object,bg="light grey",width=550,height=400)
         self.pack(fill="x")
+
+        #-----------------------1st part : Entry widget---------------------------------------------------------------
+
+        activation_page_body=Frame(self,bg="#DCDCDC",width=550,height=350)
+        activation_page_body.place(x=0,y=0)
+
+        
+        heading_label=Label(activation_page_body,text="Activate Your Software",font=("Arial",30,"bold"),bg="#DCDCDC")
+        heading_label.place(x=50,y=0)
+
+        message_label=Label(activation_page_body,text="Before we move on please enter license key,",
+                            font=("Times New Roman",20),bg="#DCDCDC")
+        message_label.place(x=0,y=50)
+        message_label2=Label(activation_page_body,text="so we can confirm your purchase.",
+                            font=("Times New Roman",20),bg="#DCDCDC")
+        message_label2.place(x=0,y=80)
+
+        license_key_label=Label(activation_page_body,text="Enter license key:",bg="#DCDCDC",font=(70))
+        license_key_label.place(x=0,y=120)
+
+        key=tk.StringVar()
+        key.set('XXXX-XXXX')
+        license_key_entry=Entry2(activation_page_body,textvariable=key,font=(15))
+        license_key_entry.place(x=130,y=120,width=300)
+
+
+
+
+
+
+
+        #-----------------------2nd part:Button settings---------------------------------------------------------------     
+        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button.place(x=370, y=360)
+        
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button.place(x=460, y=360)
+
+        
+
 
     def verify_key():
         pass
@@ -183,10 +215,10 @@ class Cloud_setup_page:
         
 
 
-
 if __name__=='__main__':
     root=Window()
     root=root.setup_window()
     #setup_page=Welcome_page(root)
-    terms_condition_page=Terms_condition_page(root)
+    #terms_condition_page=Terms_condition_page(root)
+    key_page=Software_activation_page(root)
     root.mainloop()

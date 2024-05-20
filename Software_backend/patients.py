@@ -4,9 +4,9 @@ class Patient:
     def __init__(self,cursor_object):
         self.cursor_object=cursor_object
     
-    def _patient_personal(self,patient_name,patient_id):
+    def _patient_personal(self,*table_details):
         query=f"""
-            CREATE TABLE {patient_name+str(patient_id)}(
+            CREATE TABLE {table_details[0]+str(table_details[1])}(
             session_date DATE NOT NULL,
             session_diagnostic VARCHAR(10000) NOT NULL,
             medications VARCHAR(1000),
@@ -18,12 +18,12 @@ class Patient:
         self.cursor_object.execute(query)
 
         
-    def session_result(self,patient_name,**data):
+    def session_result(self,*table_details,**data):
         query=f"""
-        INSERT INTO {patient_name}
+        INSERT INTO {table_details[0]+str(table_details[1])}
         (session_date,session_diagnostic,medications,treatment)
         VALUES
-        ({data['session_date']},{data['med']},diagnostic,medications,treatment,check_up);
+        ({data['session_date']},"{data['med']}",diagnostic,medications,treatment,check_up);
         """
         self.cursor_object.execute(query)
         self.cursor_object.commit()
