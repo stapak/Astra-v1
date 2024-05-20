@@ -39,8 +39,8 @@ class Window:
     
     def setup_window(self):
         self.setting_window_root=self._create_window()
-        width=700
-        height=500
+        width=550
+        height=400
         self.setting_window_root.geometry(f'{width}x{height}')
         self.setting_window_root.resizable(width=False,height=False)
         return self.setting_window_root
