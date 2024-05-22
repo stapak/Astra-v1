@@ -222,6 +222,8 @@ class Name_registration_page(Frame):
     This frame is used to get the hospital name 
     this frame has three parts:
     *one for company name 
+    *one for entry label 
+    *one for buttons.
     """
     def __init__(self,window_object):
         self.window_oject=window_object
