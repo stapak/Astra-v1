@@ -34,7 +34,7 @@ def create_database(cursor_object,hospital_name):
     cursor_object.execute(query3)
 
 
-def create_DB_user(cursor_object,user_name,password):
+def create_DB_staff(cursor_object,user_name,password):
     """
     Fucntion used to create user for database and connect that user to the database.
     This function has access restriction and can only be used by head of the department.
@@ -46,7 +46,8 @@ def create_DB_user(cursor_object,user_name,password):
 
 def start_boot(cursor_object,hospital_name):
     """
-    Fucntion used to start/boot the software.
+    Fucntion used to start/boot the software.This function uses call the function internally and use them for necessary start
+    the soft ware.
     """
     create_database(cursor_object,hospital_name)
 

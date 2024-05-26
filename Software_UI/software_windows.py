@@ -24,8 +24,7 @@ class Window:
     def _create_window(self):
         root =Tk()
         root.title('Astra Hospital Management')
-        window_icon=PhotoImage(file=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png')
-)
+        window_icon=PhotoImage(file=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
         root.iconphoto(False,window_icon)
         return root
 

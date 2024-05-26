@@ -154,7 +154,13 @@ class Software_activation_page(Frame):
     This is class is used to enter the license key and verify the key.
     This frame is devided into 2 parts one for entering the key and another for button
     """
-    def __init__(self,window_object):
+    def __init__(self,window_object,verify_function=None):
+        """
+        Object initaialization takes two argumets:
+        *window object and 
+        *verification function which is called by function to verify entered key.
+        
+        """
         self.window_oject=window_object
         super().__init__(window_object,bg="light grey",width=550,height=400)
         self.pack(fill="x")
@@ -180,10 +186,6 @@ class Software_activation_page(Frame):
         activation_page_body=Frame(self,bg="#DCDCDC",width=550,height=280)
         activation_page_body.place(x=0,y=71)
 
-        """
-        heading_label=Label(activation_page_body,text="Activate Your Software",font=("Arial",30,"bold"),bg="#DCDCDC")
-        heading_label.place(x=50,y=0)"""
-
         message_label=Label(activation_page_body,text="Before we move on please enter license key,so we can confirm ",
                             font=("Times New Roman",15),bg="#DCDCDC")
         message_label.place(x=0,y=0)
@@ -195,8 +197,8 @@ class Software_activation_page(Frame):
         license_key_label.place(x=0,y=50)
 
         key=tk.StringVar()
-        key.set('XXXX-XXXX')
-        license_key_entry=Entry2(activation_page_body,textvariable=key,font=(15))
+        key.set('XXXX-XXXX-XXXX')
+        license_key_entry=Entry2(activation_page_body,textvariable=key,text=key,font=(15))
         license_key_entry.place(x=130,y=50,width=300)
 
         back_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,activeforeground="red",
@@ -204,18 +206,19 @@ class Software_activation_page(Frame):
         back_button.place(x=130, y= 80,width=100)
 
 
+
         #-----------------------3rd part:Button settings---------------------------------------------------------------     
         back_button = Button(self, text="back", relief="groove", width=10)
         back_button.place(x=370, y=360)
+
+        def print_name():
+            print(key.get())
         
-        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button = Button(self, text="Next", relief="groove", width=10 ,command=print_name)
         next_button.place(x=460, y=360)
 
         
 
-
-    def verify_key():
-        pass
 
 class Name_registration_page(Frame):
     """
@@ -228,7 +231,39 @@ class Name_registration_page(Frame):
     def __init__(self,window_object):
         self.window_oject=window_object
         super().__init__(window_object,bg="light grey",width=550,height=400)
-        self.pack(fill="x")
+        self.place(x=0,y=0)
+
+        #---------------1st part:Company logo and name --------------------------------------------------------
+        name_frame=Frame(self,width=550,height=70,bg="#7CB9E8")
+        name_frame.place(x=0,y=0)
+        company_name=Label(name_frame,text="Astra Softwares",font=("Arial",20,"bold"),bg="#7CB9E8")
+        company_name.place(x=20,y=5)
+        page_short_discription=Label(name_frame,text="Register Name",bg="#7CB9E8",font=(10))
+        page_short_discription.place(x=20,y=40)
+        
+        image=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
+        resize_image=image.resize((100,60))
+        image_object=ImageTk.PhotoImage(resize_image)
+        photo_icon=Label(name_frame,image=image_object)
+        photo_icon.image=image_object
+        photo_icon.place(x=350,y=4)
+
+        #----------------------2nd part :Name entry widgets----------------------------------------------------------- 
+        main_frame=Frame(self,bg="#DCDCDC",width=550,height=280)
+        main_frame.place(x=0,y=71)
+        #message=Label(master=,text="")
+        
+
+
+
+        #-----------------------3rd part:Button settings---------------------------------------------------------------     
+        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button.place(x=370, y=360)
+        
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button.place(x=460, y=360)
+
+
 
 
 
@@ -257,4 +292,6 @@ if __name__=='__main__':
     #setup_page=Welcome_page(root)
     #terms_condition_page=Terms_condition_page(root)
     key_page=Software_activation_page(root)
+    
+    #name=Name_registration_page(root)
     root.mainloop()
