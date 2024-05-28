@@ -2,7 +2,7 @@
 This file contains all the code related to the setup window of the software
 """
 
-from software_windows import Window
+# Tkinter  liabraries
 from tkinter import Frame
 from tkinter import Label
 from tkinter import Button
@@ -14,18 +14,25 @@ import tkinter as tk
 from tkinter import Listbox
 from tkinter import IntVar
 
-from tkinter.ttk import Label as Label2
 from tkinter.ttk import Checkbutton as Checkbutton2
 from tkinter.ttk import Entry as Entry2
 from tkinter.ttk import Scrollbar as Scrollbar2
 
+
+# Other liabraries
 from PIL import Image,ImageTk
 import json
 import os
+import time
+
+# My liabraries
+from software_windows import Window
 
 #---------------------------------------Variable/attributes of file ---------------------------------------
 
 
+
+background_color="#DCDCDC"
 
 
 with open( os.path.join(os.path.dirname(os.path.realpath(__file__)),'setup_page_info.json'),encoding='utf-8' ) as fobj:
@@ -60,7 +67,7 @@ class Welcome_page(Frame):
 
 
         #-------------------------------Information frame----------------------------------
-        details_frame=Frame(self,bg="#DCDCDC",height=350,width=370)
+        details_frame=Frame(self,bg=background_color,height=350,width=370)
         details_frame.place(x=181,y=0)
 
         next_button=Button(self,text="Next",relief="groove",width=10)
@@ -98,9 +105,9 @@ class Terms_condition_page(Frame):
 
 
         #-----------------------------2nd part:terms and condition box -------------------------
-        TC_detailed_frame=Frame(self,width=550,height=290,bg="#DCDCDC")
+        TC_detailed_frame=Frame(self,width=550,height=290,bg=background_color)
         TC_detailed_frame.place(y=71,x=0)
-        head_label=Label(TC_detailed_frame,text="Terms and Conditon of Use",font=("Arial",10,"bold"),bg="#DCDCDC")
+        head_label=Label(TC_detailed_frame,text="Terms and Conditon of Use",font=("Arial",10,"bold"),bg=background_color)
         head_label.place(y=4,x=25)   
     
         scroll_box=Frame(TC_detailed_frame,bg="light blue",width=500,height=200,relief="ridge")   
@@ -121,7 +128,7 @@ class Terms_condition_page(Frame):
         
         #----------------------fucntion to change button state-----------------------------------------------
         
-        quesiton_label=Label(TC_detailed_frame,text="If you agree to the terms and conditon please tick the checkbox",bg="#DCDCDC")
+        quesiton_label=Label(TC_detailed_frame,text="If you agree to the terms and conditon please tick the checkbox",bg=background_color)
         quesiton_label.place(y=230,x=25)   
     
         check_var=IntVar()
@@ -153,6 +160,11 @@ class Software_activation_page(Frame):
     """
     This is class is used to enter the license key and verify the key.
     This frame is devided into 2 parts one for entering the key and another for button
+    
+    Initialization of the funciton of the class needs:
+    *window_object:TK class root object
+    *verification_function:A function name to verify key enterd
+    
     """
     def __init__(self,window_object,verify_function=None):
         """
@@ -183,26 +195,51 @@ class Software_activation_page(Frame):
 
         #-----------------------2nd part : Entry widget---------------------------------------------------------------
 
-        activation_page_body=Frame(self,bg="#DCDCDC",width=550,height=280)
+        activation_page_body=Frame(self,bg=background_color,width=550,height=280)
         activation_page_body.place(x=0,y=71)
 
         message_label=Label(activation_page_body,text="Before we move on please enter license key,so we can confirm ",
-                            font=("Times New Roman",15),bg="#DCDCDC")
+                            font=("Times New Roman",15),bg=background_color)
         message_label.place(x=0,y=0)
         message_label2=Label(activation_page_body,text="your purchase.",
-                            font=("Times New Roman",15),bg="#DCDCDC")
+                            font=("Times New Roman",15),bg=background_color)
         message_label2.place(x=0,y=20)
 
-        license_key_label=Label(activation_page_body,text="Enter license key:",bg="#DCDCDC",font=(70))
+        license_key_label=Label(activation_page_body,text="Enter license key:",bg=background_color,font=(70))
         license_key_label.place(x=0,y=50)
 
-        key=tk.StringVar()
-        key.set('XXXX-XXXX-XXXX')
-        license_key_entry=Entry2(activation_page_body,textvariable=key,text=key,font=(15))
-        license_key_entry.place(x=130,y=50,width=300)
+        #key_variable=tk.StringVar() #used to get the key
+        #key_variable.set('XXXX-XXXX-XXXX')#basic initialization
+        message_variable=tk.StringVar()# this variable is used to send message on screen regarding key.
 
-        back_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,activeforeground="red",
-                             cursor="hand2")
+        def key_checking(entered_key):
+            print(entered_key)
+            if entered_key.isdigit() and len(entered_key)==12:
+                if verify_function(entered_key):
+                    message_label3.config(foreground='green')
+                    message_variable.set('Key Verified')
+                    message_label3.config(textvariable=message_variable)
+                    time.sleep(2)
+                    next_button.config(state=tk.ACTIVE)
+                else:
+                    message_label3.config(foreground='red')
+                    message_variable.set('Key Invalid')
+            else:
+                message_label3.config(foreground='black')
+                message_variable.set('Enter complete key')
+
+            return True # return true after entering every key
+        registerd_funciton=window_object.register(key_checking)
+
+
+
+        license_key_entry=Entry2(activation_page_body,font=('arial',15))
+        license_key_entry.place(x=130,y=50,width=300)
+        license_key_entry.config(validate="key",validatecommand=(registerd_funciton,'%P'))
+        message_label3=Label(activation_page_body,textvariable=message_variable,font=(30),bg=background_color,foreground="Green")
+        message_label3.place(x=250,y=80)
+
+        back_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,activeforeground="red",cursor="hand2")
         back_button.place(x=130, y= 80,width=100)
 
 
@@ -210,11 +247,8 @@ class Software_activation_page(Frame):
         #-----------------------3rd part:Button settings---------------------------------------------------------------     
         back_button = Button(self, text="back", relief="groove", width=10)
         back_button.place(x=370, y=360)
-
-        def print_name():
-            print(key.get())
         
-        next_button = Button(self, text="Next", relief="groove", width=10 ,command=print_name)
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
         next_button.place(x=460, y=360)
 
         
@@ -227,8 +261,11 @@ class Name_registration_page(Frame):
     *one for company name 
     *one for entry label 
     *one for buttons.
+
+    To create object of class:
+    *window_object:
     """
-    def __init__(self,window_object):
+    def __init__(self,window_object,register_name):
         self.window_oject=window_object
         super().__init__(window_object,bg="light grey",width=550,height=400)
         self.place(x=0,y=0)
@@ -249,10 +286,48 @@ class Name_registration_page(Frame):
         photo_icon.place(x=350,y=4)
 
         #----------------------2nd part :Name entry widgets----------------------------------------------------------- 
-        main_frame=Frame(self,bg="#DCDCDC",width=550,height=280)
-        main_frame.place(x=0,y=71)
-        #message=Label(master=,text="")
         
+        #variables of the frame
+        message_variable=tk.StringVar()
+        message_variable.set("Please enter the name of the hospital, it will be used for display and others.")
+
+        message_variable2=tk.StringVar()
+
+        name_varible=tk.StringVar()
+
+
+
+        def name_checking(name):
+            print(name)
+            if name.isalpha() and len(name)>3:
+                message_variable2.set('Name Valid')
+                message_label3.config(foreground='green')
+                next_button.config(state=tk.ACTIVE)
+                return True
+            else:
+                message_label3.config(foreground='red')
+                message_variable2.set('Name Invalid')
+                next_button.config(state=tk.DISABLED)
+                return True 
+            return True
+
+        registered_function=window_object.register(name_checking)
+
+
+        
+        main_frame=Frame(self,bg=background_color,width=550,height=280)
+        main_frame.place(x=0,y=71)
+        message_label=Label(master=main_frame,textvariable=message_variable,bg=background_color,font=(15))
+        message_label.place(x=5,y=2)
+        message_label2=Label(master=main_frame,text="Hospital Name:",bg=background_color,font=("Lucida Console",15))
+        message_label2.place(x=5,y=30)
+
+        name_entry=Entry2(master=main_frame,font=("Lucida Console",20),textvariable=name_varible)
+        name_entry.place(y=60,x=7,width=525)
+        name_entry.config(validate="key",validatecommand=(registered_function,'%P'))
+
+        message_label3=Label(master=main_frame,textvariable=message_variable2,font=(30),bg=background_color)
+        message_label3.place(x=250,y=100)
 
 
 
@@ -260,7 +335,11 @@ class Name_registration_page(Frame):
         back_button = Button(self, text="back", relief="groove", width=10)
         back_button.place(x=370, y=360)
         
-        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        def register_name_function():
+            register_name(name_varible.get())
+
+
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=register_name_function)
         next_button.place(x=460, y=360)
 
 
@@ -287,11 +366,28 @@ class Cloud_setup_page(Frame):
 
 
 if __name__=='__main__':
+    # Frame Verification tests.
+    
     root=Window()
     root=root.setup_window()
+    
+    
     #setup_page=Welcome_page(root)
     #terms_condition_page=Terms_condition_page(root)
-    key_page=Software_activation_page(root)
+    #key_page=Software_activation_page(root)
+
+
+    """def verify(e):
+        return False
+    key_page=Software_activation_page(root,verify)
     
-    #name=Name_registration_page(root)
+    """
+    
+    def register_name(e):
+        print("hi"+e)
+        return None
+
+    name=Name_registration_page(root,register_name)
+
+
     root.mainloop()

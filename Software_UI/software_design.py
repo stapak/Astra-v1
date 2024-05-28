@@ -53,24 +53,6 @@ class Login_page():
 
 
 
-class Dashboard:
-    pass
-
-
-class Dashboard_reception(Dashboard):
-    pass
-
-
-class Dashboard_doctor(Dashboard):
-    pass
-
-
-class Dashboard_testing_center(Dashboard):
-    pass
-
-
-
-
 if __name__=='__main__':
     
     root=Window()
