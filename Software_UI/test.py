@@ -1,4 +1,4 @@
-import tkinter as tk
+"""import tkinter as tk
 from tkinter import ttk
 import re
 
@@ -38,11 +38,7 @@ class App(tk.Tk):
         self.email_entry['foreground'] = color
 
     def validate(self, value):
-        """
-        Validat the email entry
-        :param value:
-        :return:
-        """
+        
         pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
         if re.fullmatch(pattern, value) is None:
             return False
@@ -51,13 +47,20 @@ class App(tk.Tk):
         return True
 
     def on_invalid(self):
-        """
-        Show the error message if the data is not valid
-        :return:
-        """
+
         self.show_message('Please enter a valid email', 'red')
 
 
 if __name__ == '__main__':
     app = App()
-    app.mainloop()
+    app.mainloop()"""
+
+import mysql.connector
+try:
+    locals_connection=mysql.connector.connect(host="localhost",user="test",passwd="test4")
+except mysql.connector.errors.ProgrammingError as e:                                          
+  print(e)
+except mysql.connector.errors.DatabaseError as e:
+   print(e)
+except Exception as e:
+   print(e)

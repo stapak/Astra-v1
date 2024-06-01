@@ -3,9 +3,6 @@ This File contain window related settings.
 
 """
 
-
-
-
 from tkinter import *
 from tkinter import PhotoImage
 import json

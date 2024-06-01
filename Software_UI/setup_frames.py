@@ -3,7 +3,10 @@ This file contains all the code related to the setup window of the software
 """
 
 # Tkinter  liabraries
-from tkinter import Frame
+from cgi import test
+from msilib.schema import InstallUISequence
+from re import T
+from tkinter import TRUE, Entry, Frame
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton
@@ -13,10 +16,13 @@ from tkinter import PhotoImage
 import tkinter as tk
 from tkinter import Listbox
 from tkinter import IntVar
+from tkinter import messagebox
 
 from tkinter.ttk import Checkbutton as Checkbutton2
 from tkinter.ttk import Entry as Entry2
 from tkinter.ttk import Scrollbar as Scrollbar2
+from tkinter.ttk import Button as Button2
+
 
 
 # Other liabraries
@@ -173,7 +179,7 @@ class Software_activation_page(Frame):
         *verification function which is called by function to verify entered key.
         
         """
-        self.window_oject=window_object
+        self.window_object=window_object
         super().__init__(window_object,bg="light grey",width=550,height=400)
         self.pack(fill="x")
 
@@ -229,7 +235,7 @@ class Software_activation_page(Frame):
                 message_variable.set('Enter complete key')
 
             return True # return true after entering every key
-        registerd_funciton=window_object.register(key_checking)
+        registerd_funciton=self.window_object.register(key_checking)
 
 
 
@@ -250,8 +256,6 @@ class Software_activation_page(Frame):
         
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
         next_button.place(x=460, y=360)
-
-        
 
 
 class Name_registration_page(Frame):
@@ -289,7 +293,7 @@ class Name_registration_page(Frame):
         
         #variables of the frame
         message_variable=tk.StringVar()
-        message_variable.set("Please enter the name of the hospital, it will be used for display and others.")
+        message_variable.set("Please enter the name of the hospital.")
 
         message_variable2=tk.StringVar()
 
@@ -342,27 +346,106 @@ class Name_registration_page(Frame):
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=register_name_function)
         next_button.place(x=460, y=360)
 
-
-
-
-
-
-    
+   
 
 class DBMS_setup_page(Frame):
-    pass
+    """
+    This class is used to display a DBMS page.
+    """
+    def __init__(self,window_object):
+        pass
+        
     
-class Root_setup_page(Frame):
-    pass
+class Admin_setup_page(Frame):
+    """
+    This page is used to get the root ID and password of the setup window.
+    To creat the object of this frame two arguments are needed:
+    *window_object: Object of 'TK' class 
+    *verify_DBMS: a fucntion to test root login,password and host of DBMS,returns a boolean algebra.
+
+    """
+    def __init__(self,window_object,DBMS_verification):
+        self.window_oject=window_object
+        super().__init__(window_object,bg="light grey",width=550,height=400)
+        self.place(x=0,y=0)
+
+        #---------------1st part:Company logo and name --------------------------------------------------------
+        name_frame=Frame(self,width=550,height=70,bg="#7CB9E8")
+        name_frame.place(x=0,y=0)
+        company_name=Label(name_frame,text="Astra Softwares",font=("Arial",20,"bold"),bg="#7CB9E8")
+        company_name.place(x=20,y=5)
+        page_short_discription=Label(name_frame,text="Data Base Connection",bg="#7CB9E8",font=(10))
+        page_short_discription.place(x=20,y=40)
+        
+        image=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
+        resize_image=image.resize((100,60))
+        image_object=ImageTk.PhotoImage(resize_image)
+        photo_icon=Label(name_frame,image=image_object)
+        photo_icon.image=image_object
+        photo_icon.place(x=350,y=4)
+
+        #-------------------------2nd part: main content---------------------------------------------------------
+    
+        main_frame=Frame(self,bg=background_color,width=550,height=280)
+        main_frame.place(x=0,y=71)
+        
+        instruction_variable=tk.StringVar()
+        instruction_variable.set('Please enter the IT Head id and password and host')
+
+        instruction_label=Label(main_frame,bg=background_color,textvariable=instruction_variable,font=(10))
+        instruction_label.place(x=5,y=5)
+        
+        id_variable=tk.StringVar()
+        password_variable=tk.StringVar()
+        host_variable=tk.StringVar()
+        warning_variable=tk.StringVar()
+        
+        id_label=Label(master=main_frame,text="Admin Id:",font=(10),bg=background_color)
+        id_label.place(x=5,y=35)
+        id_entry=Entry2(master=main_frame,textvariable=id_variable,font=(10))
+        id_entry.place(x=200,y=35)
+
+        password_label=Label(master=main_frame,text="Admin password:",font=(10),bg=background_color)
+        password_label.place(x=5,y=70)
+        password_entry=Entry2(master=main_frame,textvariable=password_variable,font=(10))
+        password_entry.place(x=200,y=70)
+
+        host_label=Label(master=main_frame,text="DataBase host:",font=(10),bg=background_color)
+        host_label.place(x=5,y=105)
+        host_entry=Entry2(master=main_frame,textvariable=host_variable,font=(10))
+        host_entry.place(x=200,y=105)
+        
+        def verify_dbms():
+            return_value=DBMS_verification(id_variable.get(),password_variable.get(),host_variable.get())
+            if return_value==None:
+                messagebox.showinfo("Astra Says","DBMS connection successful!")
+                pass
+            else:
+                warning_variable.set(str(return_value))
+                messagebox.showerror("Astra Says",message=str(return_value))
+                
+            
+
+        verify_button=Button(master=main_frame,text="verify connection",relief='groove',command=verify_dbms)
+        verify_button.place(x=200,y=140)
+
+        #-----------------------3rd part:Button settings---------------------------------------------------------------     
+        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button.place(x=370, y=360)
+        
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button.place(x=460, y=360)
+
+
+
+        
+
 
 class Cloud_setup_page(Frame):
     pass
 
     
 
-
-        
-        
 
 
 if __name__=='__main__':
@@ -376,18 +459,29 @@ if __name__=='__main__':
     #terms_condition_page=Terms_condition_page(root)
     #key_page=Software_activation_page(root)
 
+    """
 
-    """def verify(e):
-        return False
+    def verify(e):
+        return True
     key_page=Software_activation_page(root,verify)
-    
     """
     
+    
+    """
     def register_name(e):
         print("hi"+e)
         return None
 
     name=Name_registration_page(root,register_name)
+    """
 
+
+    def test_function(a,b,c):
+        print(a,b,c)
+        return ValueError
+
+
+    page=Admin_setup_page(root,test_function)
+    
 
     root.mainloop()
