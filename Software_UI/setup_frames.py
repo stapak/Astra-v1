@@ -6,7 +6,7 @@ This file contains all the code related to the setup window of the software
 from cgi import test
 from msilib.schema import InstallUISequence
 from re import T
-from tkinter import TRUE, Entry, Frame
+from tkinter import TRUE, Entry, Frame, font
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton
@@ -211,11 +211,10 @@ class Software_activation_page(Frame):
                             font=("Times New Roman",15),bg=background_color)
         message_label2.place(x=0,y=20)
 
-        license_key_label=Label(activation_page_body,text="Enter license key:",bg=background_color,font=(70))
+        license_key_label=Label(activation_page_body,text="Enter license key:",bg=background_color,font=70)
         license_key_label.place(x=0,y=50)
 
-        #key_variable=tk.StringVar() #used to get the key
-        #key_variable.set('XXXX-XXXX-XXXX')#basic initialization
+        
         message_variable=tk.StringVar()# this variable is used to send message on screen regarding key.
 
         def key_checking(entered_key):
@@ -240,13 +239,15 @@ class Software_activation_page(Frame):
 
 
         license_key_entry=Entry2(activation_page_body,font=('arial',15))
-        license_key_entry.place(x=130,y=50,width=300)
+        license_key_entry.place(x=160,y=50,width=300)
         license_key_entry.config(validate="key",validatecommand=(registerd_funciton,'%P'))
         message_label3=Label(activation_page_body,textvariable=message_variable,font=(30),bg=background_color,foreground="Green")
-        message_label3.place(x=250,y=80)
+        message_label3.place(x=280,y=80)
 
-        back_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,activeforeground="red",cursor="hand2")
-        back_button.place(x=130, y= 80,width=100)
+        def send_error():
+            messagebox.showerror("Astra Says","""If You don't have a key "fuck off!" """)
+        no_key_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,activeforeground="red",cursor="hand2",command=send_error)
+        no_key_button.place(x=160, y= 80,width=100)
 
 
 
@@ -459,14 +460,15 @@ if __name__=='__main__':
     #terms_condition_page=Terms_condition_page(root)
     #key_page=Software_activation_page(root)
 
+    # activation page setup
     """
-
+    """
     def verify(e):
         return True
     key_page=Software_activation_page(root,verify)
-    """
     
     
+    # name registration page setup
     """
     def register_name(e):
         print("hi"+e)
@@ -474,14 +476,15 @@ if __name__=='__main__':
 
     name=Name_registration_page(root,register_name)
     """
-
-
+    
+    #admin setup page test
+    """
     def test_function(a,b,c):
         print(a,b,c)
-        return ValueError
+        return None
 
 
     page=Admin_setup_page(root,test_function)
-    
+    """
 
     root.mainloop()
