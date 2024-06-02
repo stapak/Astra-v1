@@ -35,16 +35,10 @@ from software_windows import Window
 
 #---------------------------------------Variable/attributes of file ---------------------------------------
 
-
-
 background_color="#DCDCDC"
-
 
 with open( os.path.join(os.path.dirname(os.path.realpath(__file__)),'setup_page_info.json'),encoding='utf-8' ) as fobj:
     setup_info=json.load(fobj)["welcome_greeting"]
-
-
-
 
 #--------------------------------------class of file-------------------------------------------------------
 
@@ -152,7 +146,6 @@ class Terms_condition_page(BaseSetupPage):
         
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
         next_button.place(x=460, y=370)
-
         
 
 
@@ -318,6 +311,7 @@ class DBMS_setup_page(Frame):
     def __init__(self,window_object):
         pass
         
+ 
     
 class Admin_setup_page(BaseSetupPage):
     """
@@ -366,8 +360,8 @@ class Admin_setup_page(BaseSetupPage):
         def verify_dbms():
             return_value=DBMS_verification(id_variable.get(),password_variable.get(),host_variable.get())
             if return_value==None:
-                messagebox.showinfo("Astra Says","DBMS connection successful!")
-                pass
+                messagebox.showinfo("Astra Says","Admin ID verified,DBMS connection successful!")
+                next_button.config(state=tk.ACTIVE)
             else:
                 warning_variable.set(str(return_value))
                 messagebox.showerror("Astra Says",message=str(return_value))
@@ -384,9 +378,6 @@ class Admin_setup_page(BaseSetupPage):
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
         next_button.place(x=460, y=360)
 
-
-
-        
 
 
 class Cloud_setup_page(Frame):
@@ -417,11 +408,6 @@ class setup_finish_page(BaseSetupPage):
         finish_button=Button(self, text="Finish", relief="groove", width=10,command=complete_setup)
         finish_button.place(x=460,y=360)
         
-
-
-
-    
-
 
 
 if __name__=='__main__':
@@ -455,18 +441,17 @@ if __name__=='__main__':
     
     #admin setup page test
     
-    """
+    
     
     def test_function(a,b,c):
         print(a,b,c)
         return None
-
-
-    #page=Admin_setup_page(root,test_function)
     
+    page=Admin_setup_page(root,test_function)
+    """
 
     """
     
-    greet=setup_finish_page(root)
+    #greet=setup_finish_page(root)
     root.mainloop()
     
