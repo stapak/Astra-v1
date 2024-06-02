@@ -3,9 +3,7 @@ This file contains all the code related to the setup window of the software
 """
 
 # Tkinter  liabraries
-from cgi import test
-from msilib.schema import InstallUISequence
-from re import T
+
 from tkinter import TRUE, Entry, Frame, font
 from tkinter import Label
 from tkinter import Button
@@ -22,6 +20,7 @@ from tkinter.ttk import Checkbutton as Checkbutton2
 from tkinter.ttk import Entry as Entry2
 from tkinter.ttk import Scrollbar as Scrollbar2
 from tkinter.ttk import Button as Button2
+from turtle import window_width
 
 
 
@@ -49,28 +48,40 @@ with open( os.path.join(os.path.dirname(os.path.realpath(__file__)),'setup_page_
 
 #--------------------------------------class of file-------------------------------------------------------
 
+class BaseSetupPage(Frame):
+    """
+    This page is base for all frame of the setup page,this contians company name and logo
+    this class will be imported to every setup frame to insert a company logo and name on top.
+    """
+    def __init__(self,window_object,page_title:str):
+        self.window_oject=window_object
+        super().__init__(window_object,bg="light grey",width=550,height=400)
+        self.pack(fill="x")
+        
+        #---------------1st part:Company logo and name --------------------------------------------------------
+        name_frame=Frame(self,width=550,height=70,bg="#7CB9E8")
+        name_frame.place(x=0,y=0)
+        company_name=Label(name_frame,text="Astra Softwares",font=("Arial",20,"bold"),bg="#7CB9E8")
+        company_name.place(x=20,y=5)
+        page_short_discription=Label(name_frame,text=page_title,bg="#7CB9E8",font=(10))
+        page_short_discription.place(x=20,y=40)
+        
+        image=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
+        resize_image=image.resize((100,60))
+        image_object=ImageTk.PhotoImage(resize_image)
+        photo_icon=Label(name_frame,image=image_object)
+        photo_icon.image=image_object
+        photo_icon.place(x=350,y=4)
 
-class Welcome_page(Frame):
+
+
+class Welcome_page(BaseSetupPage):
     """
     Class that contains the first welcome page of the setup window.
     """
     def __init__(self,window_object):
         self.window_oject=window_object
-        super().__init__(window_object,bg="light grey",width=550,height=400)
-        self.pack(fill="x")
-
-        #------------------------------ Image Frame----------------------------------------
-
-        image_frame=Frame(self,bg="#7CB9E8",width=180,height=350,relief=tk.RIDGE)
-        image_frame.place(x=0,y=0)
-        
-        image1=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
-        resize_image=image1.resize((150,100))
-        image_object=ImageTk.PhotoImage(resize_image)
-        window_icon_label=Label(image=image_object)
-        window_icon_label.image=image_object
-        window_icon_label.place(x=10,y=150)
-
+        super().__init__(window_object)
 
         #-------------------------------Information frame----------------------------------
         details_frame=Frame(self,bg=background_color,height=350,width=370)
@@ -81,33 +92,16 @@ class Welcome_page(Frame):
 
 
 
-class Terms_condition_page(Frame):
+class Terms_condition_page(BaseSetupPage):
     """
     This class is used to code second page of startup which is terms and condition page.
-    This frame is devided into 3 parts one to hold the photo and name of the software.
+    This frame is devided into 2 parts one to hold the photo and name of the software.
     One to hold the terms and condition and detailed dialog box
     One to hold the button of the page.
 
     """
     def __init__(self,window_object):
-        self.window_oject=window_object
-        super().__init__(window_object,bg="light grey",width=550,height=400)
-        self.pack(fill="x")
-        
-        #---------------1st part:Company logo and name --------------------------------------------------------
-        name_frame=Frame(self,width=550,height=70,bg="#7CB9E8")
-        name_frame.place(x=0,y=0)
-        company_name=Label(name_frame,text="Astra Softwares",font=("Arial",20,"bold"),bg="#7CB9E8")
-        company_name.place(x=20,y=5)
-        page_short_discription=Label(name_frame,text="License Agreement",bg="#7CB9E8",font=(10))
-        page_short_discription.place(x=20,y=40)
-        
-        image=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
-        resize_image=image.resize((100,60))
-        image_object=ImageTk.PhotoImage(resize_image)
-        photo_icon=Label(name_frame,image=image_object)
-        photo_icon.image=image_object
-        photo_icon.place(x=350,y=4)
+        super().__init__(self,window_object,page_title="Licence Agreement")
 
 
         #-----------------------------2nd part:terms and condition box -------------------------
@@ -162,7 +156,7 @@ class Terms_condition_page(Frame):
         
 
 
-class Software_activation_page(Frame):
+class Software_activation_page(BaseSetupPage):
     """
     This is class is used to enter the license key and verify the key.
     This frame is devided into 2 parts one for entering the key and another for button
@@ -180,24 +174,8 @@ class Software_activation_page(Frame):
         
         """
         self.window_object=window_object
-        super().__init__(window_object,bg="light grey",width=550,height=400)
-        self.pack(fill="x")
-
-        #---------------1st part:Company logo and name --------------------------------------------------------
-        name_frame=Frame(self,width=550,height=70,bg="#7CB9E8")
-        name_frame.place(x=0,y=0)
-        company_name=Label(name_frame,text="Astra Softwares",font=("Arial",20,"bold"),bg="#7CB9E8")
-        company_name.place(x=20,y=5)
-        page_short_discription=Label(name_frame,text="Activate Your Software",bg="#7CB9E8",font=(10))
-        page_short_discription.place(x=20,y=40)
+        super().__init__(window_object,page_title="Activate Software")
         
-        image=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
-        resize_image=image.resize((100,60))
-        image_object=ImageTk.PhotoImage(resize_image)
-        photo_icon=Label(name_frame,image=image_object)
-        photo_icon.image=image_object
-        photo_icon.place(x=350,y=4)
-
 
         #-----------------------2nd part : Entry widget---------------------------------------------------------------
 
@@ -259,11 +237,11 @@ class Software_activation_page(Frame):
         next_button.place(x=460, y=360)
 
 
-class Name_registration_page(Frame):
+class Name_registration_page(BaseSetupPage):
     """
     This frame is used to get the hospital name 
-    this frame has three parts:
-    *one for company name 
+    this frame has 2 parts:
+    
     *one for entry label 
     *one for buttons.
 
@@ -272,23 +250,7 @@ class Name_registration_page(Frame):
     """
     def __init__(self,window_object,register_name):
         self.window_oject=window_object
-        super().__init__(window_object,bg="light grey",width=550,height=400)
-        self.place(x=0,y=0)
-
-        #---------------1st part:Company logo and name --------------------------------------------------------
-        name_frame=Frame(self,width=550,height=70,bg="#7CB9E8")
-        name_frame.place(x=0,y=0)
-        company_name=Label(name_frame,text="Astra Softwares",font=("Arial",20,"bold"),bg="#7CB9E8")
-        company_name.place(x=20,y=5)
-        page_short_discription=Label(name_frame,text="Register Name",bg="#7CB9E8",font=(10))
-        page_short_discription.place(x=20,y=40)
-        
-        image=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
-        resize_image=image.resize((100,60))
-        image_object=ImageTk.PhotoImage(resize_image)
-        photo_icon=Label(name_frame,image=image_object)
-        photo_icon.image=image_object
-        photo_icon.place(x=350,y=4)
+        super().__init__(window_object,page_title="Register Name")
 
         #----------------------2nd part :Name entry widgets----------------------------------------------------------- 
         
@@ -304,7 +266,7 @@ class Name_registration_page(Frame):
 
         def name_checking(name):
             print(name)
-            if name.isalpha() and len(name)>3:
+            if (name.isalpha() or name==" ")and len(name)>3 :
                 message_variable2.set('Name Valid')
                 message_label3.config(foreground='green')
                 next_button.config(state=tk.ACTIVE)
@@ -357,7 +319,7 @@ class DBMS_setup_page(Frame):
         pass
         
     
-class Admin_setup_page(Frame):
+class Admin_setup_page(BaseSetupPage):
     """
     This page is used to get the root ID and password of the setup window.
     To creat the object of this frame two arguments are needed:
@@ -365,25 +327,10 @@ class Admin_setup_page(Frame):
     *verify_DBMS: a fucntion to test root login,password and host of DBMS,returns a boolean algebra.
 
     """
-    def __init__(self,window_object,DBMS_verification):
+    def __init__(self,window_object,DBMS_verification:callable):
         self.window_oject=window_object
-        super().__init__(window_object,bg="light grey",width=550,height=400)
-        self.place(x=0,y=0)
-
-        #---------------1st part:Company logo and name --------------------------------------------------------
-        name_frame=Frame(self,width=550,height=70,bg="#7CB9E8")
-        name_frame.place(x=0,y=0)
-        company_name=Label(name_frame,text="Astra Softwares",font=("Arial",20,"bold"),bg="#7CB9E8")
-        company_name.place(x=20,y=5)
-        page_short_discription=Label(name_frame,text="Data Base Connection",bg="#7CB9E8",font=(10))
-        page_short_discription.place(x=20,y=40)
+        super().__init__(window_object,page_title="Admin setup")
         
-        image=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
-        resize_image=image.resize((100,60))
-        image_object=ImageTk.PhotoImage(resize_image)
-        photo_icon=Label(name_frame,image=image_object)
-        photo_icon.image=image_object
-        photo_icon.place(x=350,y=4)
 
         #-------------------------2nd part: main content---------------------------------------------------------
     
@@ -443,7 +390,35 @@ class Admin_setup_page(Frame):
 
 
 class Cloud_setup_page(Frame):
+    """
+    Page used to setup cloud server.
+    """
     pass
+
+
+class setup_finish_page(BaseSetupPage):
+     def __init__(self,window_object):
+        self.window_oject=window_object
+        super().__init__(window_object,page_title="Installaiton Finished")
+        #-------------------------------------------- Greeting page------------------------------------------------
+        main_frame=Frame(self,bg=background_color,width=550,height=280)
+        main_frame.place(x=0,y=71)
+        greeting_label=Label(master=main_frame,bg=background_color,text="Software installation complete !",font=('Arial',25,'bold'),foreground="Green")  
+        greeting_label.place(x=15,y=10)
+        message_label=Label(master=main_frame,bg=background_color,text="You can use the software once you click on finish button.",font=10)
+        message_label.place(x=15,y=45)
+        
+        #-------------------------------------------- button -----------------------------------------------------
+
+        def complete_setup():
+            time.sleep(0.2)
+            window_object.destroy()
+            
+        finish_button=Button(self, text="Finish", relief="groove", width=10,command=complete_setup)
+        finish_button.place(x=460,y=360)
+        
+
+
 
     
 
@@ -462,11 +437,12 @@ if __name__=='__main__':
 
     # activation page setup
     """
-    """
+    
     def verify(e):
         return True
     key_page=Software_activation_page(root,verify)
     
+    """
     
     # name registration page setup
     """
@@ -478,13 +454,19 @@ if __name__=='__main__':
     """
     
     #admin setup page test
+    
     """
+    
     def test_function(a,b,c):
         print(a,b,c)
         return None
 
 
-    page=Admin_setup_page(root,test_function)
-    """
+    #page=Admin_setup_page(root,test_function)
+    
 
+    """
+    
+    greet=setup_finish_page(root)
     root.mainloop()
+    
