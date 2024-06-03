@@ -442,7 +442,7 @@ if __name__=='__main__':
     #admin setup page test
     
     
-    
+    """
     def test_function(a,b,c):
         print(a,b,c)
         return None
@@ -450,7 +450,7 @@ if __name__=='__main__':
     page=Admin_setup_page(root,test_function)
     """
 
-    """
+    
     
     #greet=setup_finish_page(root)
     root.mainloop()

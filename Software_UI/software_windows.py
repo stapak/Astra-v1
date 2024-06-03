@@ -28,9 +28,10 @@ class Window:
     #--------------------window with different sizes------------------------------
     def normal_window(self):
         self.root_object=self._create_window()
-        width=1920
-        height=1080
+        width=1535
+        height=780
         self.root_object.geometry(f'{width}x{height}')
+        self.root_object.maxsize(width,height)
         return self.root_object
     
     def setup_window(self):
@@ -40,6 +41,14 @@ class Window:
         self.setting_window_root.geometry(f'{width}x{height}')
         self.setting_window_root.resizable(width=False,height=False)
         return self.setting_window_root
+    
+    def login_window(self):
+        self.login_root=self._create_window()
+        width=700
+        height=500
+        self.login_root.geometry(f'{width}x{height}')
+        self.login_root.resizable(width=False,height=False)
+        return self.login_root
 
 
 
@@ -56,6 +65,7 @@ if __name__=='__main__':
       window_root=Window()
       #window_root=window_root.setup_window()
       window_root=window_root.normal_window()
+      #window_root=window_root.login_window()
       window_root.mainloop()
       
       

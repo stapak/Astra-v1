@@ -56,7 +56,7 @@ class Login_page():
 if __name__=='__main__':
     
     root=Window()
-    root=root.normal_window()
+    root=root.normal_wind()
     Login_page(root)
     root.mainloop()
 
