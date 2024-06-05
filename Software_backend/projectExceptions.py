@@ -2,6 +2,8 @@
 This file is to keep a track of all user defined exeception.
 """
 
+
+
 class NotAuthorized(Exception):
     """
     This execption   used to raise error when some user uses the method for which they are not permitted.
@@ -17,5 +19,17 @@ class TreatmentComplete(Exception):
 class UserDetailsNotFound(Exception):
     """
     This error used to indicate that the user mention is not found in the database.
+    """
+    pass
+
+class HostError(Exception):
+    """
+    Used to dispaly error when host not found for database.
+    """
+    pass
+
+class UserError(Exception):
+    """
+    Used to display error when User ID OR Passwrod error.
     """
     pass
