@@ -3,8 +3,8 @@ This file contains frames related to all the work of the receptionist.
 
 """
 
-
-from tkinter import  Frame, LabelFrame, Place
+# tkinter libraries
+from tkinter import  Frame, LabelFrame, Place, font
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton
@@ -15,16 +15,12 @@ from tkinter import IntVar
 from tkinter import StringVar
 from tkinter import messagebox
 
-
+# tkk libraries
 from tkinter.ttk import Checkbutton 
 from tkinter.ttk import Entry 
 from tkinter import Scrollbar
 from tkinter.ttk import Button as Button2
 from tkinter.ttk import Combobox
-
-
-
-
 
 
 # Other liabraries
@@ -197,6 +193,7 @@ class RegisterPatient(BaseReceptionFrame):
         district_variable=StringVar()
         state_variable=StringVar()
         contry_variable=StringVar()
+        pincode_variable=StringVar()
         contry_variable.set('India')
         
 
@@ -243,10 +240,15 @@ class RegisterPatient(BaseReceptionFrame):
         contry_name_entry=Entry(master=current_address_frame,textvariable=contry_variable,width=15,font=entry_font)
         contry_name_entry.place(y=52,x=1030,height=35)
         
+        pincode_label=Label(master=current_address_frame,text="pincode:",font=basic_font)
+        pincode_label.place(x=1225,y=55)
+        pincode_entry=Entry(master=current_address_frame,textvariable=pincode_variable,width=16,font=entry_font)
+        pincode_entry.place(y=52,x=1330,height=35)
+        
 
 
         #------------------ Permanent Address Frame -----------------------------------------------------------------------------
-        parmanent_address_frame=LabelFrame(master=self,height=140,width=1535,text="Permanent Address",borderwidth=2,relief="groove")
+        parmanent_address_frame=LabelFrame(master=self,height=150,width=1535,text="Permanent Address",borderwidth=2,relief="groove")
         parmanent_address_frame.place(y=370,x=0)
         
         #----------------- Variables ---------------------
@@ -257,10 +259,40 @@ class RegisterPatient(BaseReceptionFrame):
         town_variable2=StringVar()
         district_variable2=StringVar()
         state_variable2=StringVar()
+        pincode_variable2=StringVar()        
+
+        same_variable=IntVar()
         
         contry_variable2=StringVar()
         contry_variable2.set('India')
         
+        #----------------------- Functions to be called by the widgets -----------------------
+        def set_value():
+            if bulding_name.get()=='' or town_variable.get()=='' or district_variable.get()=='' or pincode_variable.get()=='' and same_variable.get():
+                messagebox.showerror("Astra Says","Fill all the block of current address ")
+            else:
+                if same_variable.get():
+                    house_no2.set(house_no.get())
+                    block_no2.set(block_no.get())
+                    bulding_name2.set(bulding_name.get())
+                    land_mark2.set(land_mark.get())
+                    town_variable2.set(town_variable.get())
+                    district_variable2.set(district_variable.get())
+                    state_variable2.set(state_variable.get())
+                    contry_variable2.set(contry_variable.get())
+                    pincode_variable2.set(pincode_variable.get())
+
+                else:
+                    house_no2.set('')
+                    block_no2.set('')
+                    bulding_name2.set('')
+                    land_mark2.set('')
+                    town_variable2.set('')
+                    district_variable2.set('')
+                    state_variable2.set('')
+                    contry_variable2.set('')
+                    pincode_variable2.set('')
+                
 
         #------------------ widgets------------------------------
         house_no_label2=Label(master=parmanent_address_frame,text="House no:",font=basic_font)
@@ -304,9 +336,21 @@ class RegisterPatient(BaseReceptionFrame):
         contry_name_entry2=Entry(master=parmanent_address_frame,textvariable=contry_variable2,width=15,font=entry_font)
         contry_name_entry2.place(y=52,x=1030,height=35)
         
+        pincode_label2=Label(master=parmanent_address_frame,text="pincode:",font=basic_font)
+        pincode_label2.place(x=1225,y=55)
+        pincode_entry2=Entry(master=parmanent_address_frame,textvariable=pincode_variable2,width=16,font=entry_font)
+        pincode_entry2.place(y=52,x=1330,height=35)
+        
+        
+        same_checkbutton=Checkbutton(master=parmanent_address_frame,text="Permanent address same as current address",onvalue=1,
+                                     offvalue=0,command=set_value,variable=same_variable)
+        same_checkbutton.place(x=5,y=90)
+        
+        
+        
         #---------------------- Relative Information Frame -----------------------------------------------------
         relative_info_frame=LabelFrame(master=self,width=1535,height=180,text="Relative's Contact",borderwidth=2,relief='groove')
-        relative_info_frame.place(y=500,x=0)
+        relative_info_frame.place(y=510,x=0)
         
         #--------------- Variables ---------------------------------
         
@@ -399,7 +443,7 @@ class RegisterPatient(BaseReceptionFrame):
         
         #------------------------- Medical histroy -----------------------------------------------------------------------------
         medical_history_frame=LabelFrame(master=self,width=1535,height=110,text="Medical History",borderwidth=2,relief='groove')
-        medical_history_frame.place(y=670,x=0)
+        medical_history_frame.place(y=680,x=0)
         
         #-------------- Variables -----------------------------
         patient_department=StringVar()

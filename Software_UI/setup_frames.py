@@ -4,7 +4,8 @@ This file contains all the code related to the setup window of the software
 
 # Tkinter  liabraries
 
-from tkinter import TRUE, Entry, Frame, font
+import stat
+from tkinter import TRUE, Entry, Frame, StringVar, font
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton
@@ -75,7 +76,7 @@ class Welcome_page(BaseSetupPage):
     """
     def __init__(self,window_object):
         self.window_oject=window_object
-        super().__init__(window_object)
+        super().__init__(window_object,page_title="Welcome Page")
 
         #-------------------------------Information frame----------------------------------
         details_frame=Frame(self,bg=background_color,height=350,width=370)
@@ -95,7 +96,7 @@ class Terms_condition_page(BaseSetupPage):
 
     """
     def __init__(self,window_object):
-        super().__init__(self,window_object,page_title="Licence Agreement")
+        super().__init__(window_object,page_title="Licence Agreement")
 
 
         #-----------------------------2nd part:terms and condition box -------------------------
@@ -189,7 +190,6 @@ class Software_activation_page(BaseSetupPage):
         message_variable=tk.StringVar()# this variable is used to send message on screen regarding key.
 
         def key_checking(entered_key):
-            print(entered_key)
             if entered_key.isdigit() and len(entered_key)==12:
                 if verify_function(entered_key):
                     message_label3.config(foreground='green')
@@ -199,10 +199,12 @@ class Software_activation_page(BaseSetupPage):
                     next_button.config(state=tk.ACTIVE)
                 else:
                     message_label3.config(foreground='red')
+                    next_button.config(state=tk.DISABLED)
                     message_variable.set('Key Invalid')
             else:
                 message_label3.config(foreground='black')
-                message_variable.set('Enter complete key')
+                next_button.config(state=tk.DISABLED)
+                message_variable.set('Enter complete key and wait')
 
             return True # return true after entering every key
         registerd_funciton=self.window_object.register(key_checking)
@@ -216,7 +218,7 @@ class Software_activation_page(BaseSetupPage):
         message_label3.place(x=280,y=80)
 
         def send_error():
-            messagebox.showerror("Astra Says","""If You don't have a key "fuck off!" """)
+            messagebox.showerror("Astra Says",""" If You don't have a key "fuck off!" """)
         no_key_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,activeforeground="red",cursor="hand2",command=send_error)
         no_key_button.place(x=160, y= 80,width=100)
 
@@ -358,13 +360,16 @@ class Admin_setup_page(BaseSetupPage):
         host_entry.place(x=200,y=105)
         
         def verify_dbms():
-            return_value=DBMS_verification(id_variable.get(),password_variable.get(),host_variable.get())
-            if return_value==None:
-                messagebox.showinfo("Astra Says","Admin ID verified,DBMS connection successful!")
-                next_button.config(state=tk.ACTIVE)
+            if id_variable.get() != '' and password_variable.get() != '' and host_variable.get() != '':
+                return_value=DBMS_verification(id_variable.get(),password_variable.get(),host_variable.get())
+                if return_value==None:
+                    messagebox.showinfo("Astra Says","Admin ID verified,DBMS connection successful!")
+                    next_button.config(state=tk.ACTIVE)
+                else:
+                    warning_variable.set(str(return_value))
+                    messagebox.showerror("Astra Says",message=str(return_value))
             else:
-                warning_variable.set(str(return_value))
-                messagebox.showerror("Astra Says",message=str(return_value))
+                messagebox.showerror("Astra Says","Enter all the Details.")
                 
             
 
@@ -427,13 +432,12 @@ if __name__=='__main__':
     def verify(e):
         return True
     key_page=Software_activation_page(root,verify)
-    
     """
+    
     
     # name registration page setup
     """
     def register_name(e):
-        print("hi"+e)
         return None
 
     name=Name_registration_page(root,register_name)
@@ -442,15 +446,14 @@ if __name__=='__main__':
     #admin setup page test
     
     
-    """
+    
     def test_function(a,b,c):
         print(a,b,c)
         return None
     
     page=Admin_setup_page(root,test_function)
-    """
+    """"""
 
-    
     
     #greet=setup_finish_page(root)
     root.mainloop()
