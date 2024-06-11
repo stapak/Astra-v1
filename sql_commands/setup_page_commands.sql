@@ -48,10 +48,16 @@ post VARCHAR(20) NOT NULL,
 registrer_id VARCHAR(20) NOT NULL,
 password VARCHAR(30) NOT NULL,
 login_status BOOLEAN NOT NULL,
-FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id)
+dept_id VARCHAR(20) NOT NULL,
+FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id),
+FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
 );
 
+drop table doctor_info;
 
+/*
+5th commad: To create table related to pharmacy
+*/
 CREATE TABLE pharmacy_info(
 pharmacist_id VARCHAR(20) PRIMARY KEY,
 name VARCHAR(50) NOT NULL,
@@ -68,6 +74,45 @@ login_status BOOLEAN NOT NULL,
 FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id)
 );
 
+
+/*
+6th command : To create table related to login info
+*/
+CREATE TABLE login_info(
+user_id VARCHAR(20) NOT NULL,
+login_time_date DATETIME NOT NULL,
+logout_time_date DATETIME NOT NULL,
+FOREIGN KEY (user_id) REFERENCES hospital_staff(staff_id),
+FOREIGN KEY (user_id) REFERENCES doctor_info(doctor_id),
+FOREIGN KEY (user_id) REFERENCES pharmacy_info(pharmacist_id)
+);
+
+drop table login_info;
+
+/*
+7th command : To create table related to department
+*/
+CREATE TABLE departments(
+dept_id VARCHAR(20) NOT NULL PRIMARY KEY,
+dept_name VARCHAR(20) NOT NULL ,
+total_doctors INT 
+);
+
+/*
+8th command : To create table related to book session for doctor and show it on doctor interface
+*/
+
+CREATE TABLE task_list(
+task_id VARCHAR(20) NOT NULL,
+given_by VARCHAR(20) NOT NULL,
+given_to VARCHAR(20) NOT NULL,
+given_time_date DATETIME NOT NULL,
+task_date_time DATETIME NOT NULL,
+FOREIGN KEY (given_by) REFERENCES hospital_staff(staff_id),
+FOREIGN KEY (given_by) REFERENCES doctor_info(doctor_id),
+FOREIGN KEY (given_to) REFERENCES doctor_info(doctor_id),
+FOREIGN KEY (given_to) REFERENCES pharmacy_info(pharmacist_id)
+);
 
 
 
