@@ -28,7 +28,7 @@ class HostError(Exception):
     """
     pass
 
-class UserError(Exception):
+class WrongUserInformation(Exception):
     """
     Used to display error when User ID OR Passwrod error.
     """

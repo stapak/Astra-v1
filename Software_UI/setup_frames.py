@@ -4,6 +4,7 @@ This file contains all the code related to the setup window of the software
 
 # Tkinter  liabraries
 
+
 import stat
 from tkinter import TRUE, Entry, Frame, StringVar, font
 from tkinter import Label
@@ -21,7 +22,9 @@ from tkinter.ttk import Checkbutton as Checkbutton2
 from tkinter.ttk import Entry as Entry2
 from tkinter.ttk import Scrollbar as Scrollbar2
 from tkinter.ttk import Button as Button2
-from turtle import window_width
+from tkinter.ttk import Progressbar
+from tracemalloc import start
+
 
 
 
@@ -37,6 +40,8 @@ from software_windows import Window
 #---------------------------------------Variable/attributes of file ---------------------------------------
 
 background_color="#DCDCDC"
+basic_font=('Lucida Console',15) 
+entry_font=('Lucida Console',12)
 
 with open( os.path.join(os.path.dirname(os.path.realpath(__file__)),'setup_page_info.json'),encoding='utf-8' ) as fobj:
     setup_info=json.load(fobj)["welcome_greeting"]
@@ -232,6 +237,7 @@ class Software_activation_page(BaseSetupPage):
         next_button.place(x=460, y=360)
 
 
+
 class Name_registration_page(BaseSetupPage):
     """
     This frame is used to get the hospital name 
@@ -304,17 +310,9 @@ class Name_registration_page(BaseSetupPage):
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=register_name_function)
         next_button.place(x=460, y=360)
 
+
    
 
-class DBMS_setup_page(Frame):
-    """
-    This class is used to display a DBMS page.
-    """
-    def __init__(self,window_object):
-        pass
-        
- 
-    
 class Admin_setup_page(BaseSetupPage):
     """
     This page is used to get the root ID and password of the setup window.
@@ -385,11 +383,78 @@ class Admin_setup_page(BaseSetupPage):
 
 
 
+class DBMS_setup_page(BaseSetupPage):
+    """
+    This class is used to display a DBMS page with a progress bar .
+    """
+    def __init__(self,window_object,dbms_setup_functions):
+        super().__init__(window_object,page_title="DataBase Setup")
+        
+        #------------------------------------------- 1st part: main frame ------------------------------------------------
+        dbms_main_frame=Frame(master=self,width=550,height=280)
+        dbms_main_frame.place(x=0,y=71)
+        
+        #----------------------- attributes of the frame --------------------------
+        
+        messag_variable=StringVar()
+        messag_variable.set('Data base setup may take time,When ready click start')
+        
+        
+        #--------------------------- Functions of the frame ---------------------
+
+        def start_connection():
+            messag_variable.set('Data Base is setup on going do not close window')
+        
+            dbms_status=dbms_setup_functions()
+            progress_percent=5
+            for i in dbms_status.keys():
+                if dbms_status[i]:
+                    progressbar_object['value']=progress_percent
+                    progressbar_object.update_idletasks()
+                    time.sleep(2)
+                    progress_percent= progress_percent+10  
+                else:
+                    answer=messagebox.askretrycancel("Astra Says","DBMS setup unsuccesful !,retry to connect to dbms")
+                    if answer:
+                        start_connection()
+                    else:
+                        answer2=messagebox.askyesno("Astra Says","Close setup")
+                        if answer2:
+                            window_object.destroy() 
+                    return None
+            messag_variable.set('Database Ready')
+            next_button.config(state=tk.ACTIVE)
+                            
+          
+            
+        #--------------------- widgets of the frame ----------------------------------
+        message_label=Label(master=dbms_main_frame,textvariable=messag_variable,font=(15))  
+        message_label.place(x=10,y=10)
+        
+        
+        progressbar_object=Progressbar(master=dbms_main_frame,orient="horizontal",length=100,mode="determinate")
+        progressbar_object.place(x=25,y=50,width=500,height=25)
+        
+        start_button=Button(master=dbms_main_frame,width=10,text="Start",relief="groove",command=start_connection)
+        start_button.place(x=430,y=90)
+        
+
+        #-----------------------2nd part:Button settings----------------------------
+        
+        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button.place(x=370, y=365)
+        
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button.place(x=460, y=365)
+
+        
+   
 class Cloud_setup_page(Frame):
     """
     Page used to setup cloud server.
     """
     pass
+
 
 
 class setup_finish_page(BaseSetupPage):
@@ -444,15 +509,22 @@ if __name__=='__main__':
     """
     
     #admin setup page test
-    
-    
-    
+    """
     def test_function(a,b,c):
         print(a,b,c)
         return None
     
     page=Admin_setup_page(root,test_function)
-    """"""
+    """
+    
+    #dbms setup test
+    """
+    def verification():
+        return {"first function":True,"second function":True}
+    
+    frame_object=DBMS_setup_page(root,verification)
+    """
+  
 
     
     #greet=setup_finish_page(root)

@@ -6,15 +6,29 @@ This file is used to start the software.
 import json
 import mysql.connector
 
-# Created Modules.
 
-from Software_UI.software_windows import Window
-from Software_UI.setup_window import Welcome_page,terms_condition_page
 
-root=Window()
-root=root.setup_window()
+#-------------------------- Astra modules ------------------------------------------
 
-page=Welcome_page(root)
+
+#--------- Backend Modules --------------------------
+from Software_backend import *
+
+
+
+#-------- Front End Modules
+from Software_UI import *
+
+
+with open('software_info.json') as file_object:
+    bootup_info=json.load(file_object)
+    
+
+# If 'setup_complete' variable has true value then bootup software will be called.
+if bootup_info['setup_complete']:
+    pass
+else:
+    pass
 
 
 
