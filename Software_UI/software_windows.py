@@ -3,7 +3,7 @@ This File contain window related settings.
 
 """
 
-from tkinter import *
+from tkinter import Tk
 from tkinter import PhotoImage
 import json
 import os
@@ -11,7 +11,7 @@ import time
 
 
      
-class Window:
+class Window():
     """
     Creates window objects and sets basic settings 
     """
@@ -20,7 +20,7 @@ class Window:
 
     def _create_window(self):
         root =Tk()
-        root.title('Astra Hospital Management')
+        root.title('Astra Hospital Management-v1')
         window_icon=PhotoImage(file=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
         root.iconphoto(False,window_icon)
         return root

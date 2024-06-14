@@ -5,7 +5,7 @@ This file contains all the code related to the setup window of the software
 # Tkinter  liabraries
 
 
-import stat
+from ast import Name
 from tkinter import TRUE, Entry, Frame, StringVar, font
 from tkinter import Label
 from tkinter import Button
@@ -23,7 +23,6 @@ from tkinter.ttk import Entry as Entry2
 from tkinter.ttk import Scrollbar as Scrollbar2
 from tkinter.ttk import Button as Button2
 from tkinter.ttk import Progressbar
-from tracemalloc import start
 
 
 
@@ -75,20 +74,43 @@ class BaseSetupPage(Frame):
 
 
 
-class Welcome_page(BaseSetupPage):
+class Welcome_page(Frame):
     """
     Class that contains the first welcome page of the setup window.
     """
-    def __init__(self,window_object):
+    def __init__(self,window_object,switch_pages):
         self.window_oject=window_object
-        super().__init__(window_object,page_title="Welcome Page")
+        self.window_oject=window_object
+        super().__init__(window_object,bg="light grey",width=550,height=400)
+        self.pack(fill="x")
+
+        #------------------------------ Image Frame----------------------------------------
+
+        image_frame=Frame(self,bg="#7CB9E8",width=180,height=350,relief=tk.RIDGE)
+        image_frame.place(x=0,y=0)
+        
+        image1=Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
+        resize_image=image1.resize((150,100))
+        image_object=ImageTk.PhotoImage(resize_image)
+        window_icon_label=Label(image=image_object)
+        window_icon_label.image=image_object
+        window_icon_label.place(x=10,y=50)
+        
+        company_name_label=Label(master=image_frame,text="Astra",font=("Arial",45,"bold"),foreground='black',background="#7CB9E8")
+        company_name_label.place(x=10,y=150)
+        company_name_label2=Label(master=image_frame,text="softwares",font=("Arial",25),foreground='black',background="#7CB9E8")
+        company_name_label2.place(x=15,y=210)
+
 
         #-------------------------------Information frame----------------------------------
         details_frame=Frame(self,bg=background_color,height=350,width=370)
         details_frame.place(x=181,y=0)
 
-        next_button=Button(self,text="Next",relief="groove",width=10)
+        next_button=Button(self,text="Next",relief="groove",width=10,command=switch_pages.switch_front)
         next_button.place(x=460,y=360)
+
+
+page1=Welcome_page
 
 
 
@@ -100,7 +122,7 @@ class Terms_condition_page(BaseSetupPage):
     One to hold the button of the page.
 
     """
-    def __init__(self,window_object):
+    def __init__(self,window_object,switch_pages):
         super().__init__(window_object,page_title="Licence Agreement")
 
 
@@ -126,9 +148,10 @@ class Terms_condition_page(BaseSetupPage):
             terms_and_condition_listbox.insert(tk.END,i)
 
         
-        #----------------------fucntion to change button state-----------------------------------------------
+        #---------------------- function to change button state-----------------------------------------------
         
-        quesiton_label=Label(TC_detailed_frame,text="If you agree to the terms and conditon please tick the checkbox",bg=background_color)
+        quesiton_label=Label(TC_detailed_frame,text="If you agree to the terms and conditon please tick the checkbox",
+                             bg=background_color)
         quesiton_label.place(y=230,x=25)   
     
         check_var=IntVar()
@@ -147,12 +170,14 @@ class Terms_condition_page(BaseSetupPage):
         #-----------------------3rd part:Button settings-------------------------------------------------------------------
         
         
-        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button = Button(self, text="back", relief="groove", width=10,command=switch_pages.switch_back)
         back_button.place(x=370, y=370)
         
-        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
         next_button.place(x=460, y=370)
-        
+
+page2=Terms_condition_page        
+
 
 
 class Software_activation_page(BaseSetupPage):
@@ -165,7 +190,7 @@ class Software_activation_page(BaseSetupPage):
     *verification_function:A function name to verify key enterd
     
     """
-    def __init__(self,window_object,verify_function=None):
+    def __init__(self,window_object,switch_pages,verify_function):
         """
         Object initaialization takes two argumets:
         *window object and 
@@ -177,23 +202,13 @@ class Software_activation_page(BaseSetupPage):
         
 
         #-----------------------2nd part : Entry widget---------------------------------------------------------------
-
         activation_page_body=Frame(self,bg=background_color,width=550,height=280)
         activation_page_body.place(x=0,y=71)
-
-        message_label=Label(activation_page_body,text="Before we move on please enter license key,so we can confirm ",
-                            font=("Times New Roman",15),bg=background_color)
-        message_label.place(x=0,y=0)
-        message_label2=Label(activation_page_body,text="your purchase.",
-                            font=("Times New Roman",15),bg=background_color)
-        message_label2.place(x=0,y=20)
-
-        license_key_label=Label(activation_page_body,text="Enter license key:",bg=background_color,font=70)
-        license_key_label.place(x=0,y=50)
-
         
+        #---- Variables of Frame ------------
         message_variable=tk.StringVar()# this variable is used to send message on screen regarding key.
 
+        #---- Functions of frame ------------
         def key_checking(entered_key):
             if entered_key.isdigit() and len(entered_key)==12:
                 if verify_function(entered_key):
@@ -213,28 +228,47 @@ class Software_activation_page(BaseSetupPage):
 
             return True # return true after entering every key
         registerd_funciton=self.window_object.register(key_checking)
+        
+        def send_error_message():
+            messagebox.showerror("Astra Says",""" If You don't have a key "fuck off!" """)
+        
+        #---------------widgets of frame -----------------------
+       
 
+        message_label=Label(activation_page_body,text="Before we move on please enter license key,so we can confirm ",
+                            font=("Times New Roman",15),bg=background_color)
+        message_label.place(x=0,y=0)
+        message_label2=Label(activation_page_body,text="your purchase.",
+                            font=("Times New Roman",15),bg=background_color)
+        message_label2.place(x=0,y=20)
 
+        license_key_label=Label(activation_page_body,text="Enter license key:",bg=background_color,font=70)
+        license_key_label.place(x=0,y=50)
 
+        
+ 
         license_key_entry=Entry2(activation_page_body,font=('arial',15))
         license_key_entry.place(x=160,y=50,width=300)
         license_key_entry.config(validate="key",validatecommand=(registerd_funciton,'%P'))
-        message_label3=Label(activation_page_body,textvariable=message_variable,font=(30),bg=background_color,foreground="Green")
+        message_label3=Label(activation_page_body,textvariable=message_variable,font=(30),bg=background_color,
+                             foreground="Green")
         message_label3.place(x=280,y=80)
 
-        def send_error():
-            messagebox.showerror("Astra Says",""" If You don't have a key "fuck off!" """)
-        no_key_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,activeforeground="red",cursor="hand2",command=send_error)
+        
+        no_key_button = Button(activation_page_body, text="I don't have a key", relief="flat", width=10,
+                               activeforeground="red",cursor="hand2",command=send_error_message)
         no_key_button.place(x=160, y= 80,width=100)
 
 
 
         #-----------------------3rd part:Button settings---------------------------------------------------------------     
-        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button = Button(self, text="back", relief="groove", width=10,command=switch_pages.switch_back)
         back_button.place(x=370, y=360)
         
-        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
         next_button.place(x=460, y=360)
+
+page3=Software_activation_page
 
 
 
@@ -249,13 +283,16 @@ class Name_registration_page(BaseSetupPage):
     To create object of class:
     *window_object:
     """
-    def __init__(self,window_object,register_name):
+    def __init__(self,window_object,switch_pages,register_name):
         self.window_oject=window_object
         super().__init__(window_object,page_title="Register Name")
 
         #----------------------2nd part :Name entry widgets----------------------------------------------------------- 
         
-        #variables of the frame
+        main_frame=Frame(self,bg=background_color,width=550,height=280)
+        main_frame.place(x=0,y=71)
+        
+        #--------variables of the frame ---------
         message_variable=tk.StringVar()
         message_variable.set("Please enter the name of the hospital.")
 
@@ -264,9 +301,8 @@ class Name_registration_page(BaseSetupPage):
         name_varible=tk.StringVar()
 
 
-
+        #------ functions of frame--------------
         def name_checking(name):
-            print(name)
             if (name.isalpha() or name==" ")and len(name)>3 :
                 message_variable2.set('Name Valid')
                 message_label3.config(foreground='green')
@@ -280,11 +316,12 @@ class Name_registration_page(BaseSetupPage):
             return True
 
         registered_function=window_object.register(name_checking)
-
-
         
-        main_frame=Frame(self,bg=background_color,width=550,height=280)
-        main_frame.place(x=0,y=71)
+        def register_name_function():
+            register_name(name_varible.get())
+            switch_pages.switch_front
+
+        #-------- Widgets of the frame -------------------
         message_label=Label(master=main_frame,textvariable=message_variable,bg=background_color,font=(15))
         message_label.place(x=5,y=2)
         message_label2=Label(master=main_frame,text="Hospital Name:",bg=background_color,font=("Lucida Console",15))
@@ -300,18 +337,15 @@ class Name_registration_page(BaseSetupPage):
 
 
         #-----------------------3rd part:Button settings---------------------------------------------------------------     
-        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button = Button(self, text="back", relief="groove", width=10,command=switch_pages.switch_back)
         back_button.place(x=370, y=360)
         
-        def register_name_function():
-            register_name(name_varible.get())
-
-
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=register_name_function)
         next_button.place(x=460, y=360)
 
+page4=Name_registration_page
 
-   
+
 
 class Admin_setup_page(BaseSetupPage):
     """
@@ -321,26 +355,44 @@ class Admin_setup_page(BaseSetupPage):
     *verify_DBMS: a fucntion to test root login,password and host of DBMS,returns a boolean algebra.
 
     """
-    def __init__(self,window_object,DBMS_verification:callable):
+    def __init__(self,window_object,switch_pages,DBMS_verification:callable):
         self.window_oject=window_object
         super().__init__(window_object,page_title="Admin setup")
         
 
         #-------------------------2nd part: main content---------------------------------------------------------
-    
+        
         main_frame=Frame(self,bg=background_color,width=550,height=280)
         main_frame.place(x=0,y=71)
         
-        instruction_variable=tk.StringVar()
-        instruction_variable.set('Please enter the IT Head id and password and host')
 
-        instruction_label=Label(main_frame,bg=background_color,textvariable=instruction_variable,font=(10))
-        instruction_label.place(x=5,y=5)
+        #------------ Variables of Frame ----------------
         
         id_variable=tk.StringVar()
         password_variable=tk.StringVar()
         host_variable=tk.StringVar()
         warning_variable=tk.StringVar()
+        instruction_variable=tk.StringVar()
+        instruction_variable.set('Please enter the IT Head id and password and host')
+        
+        #------------ Functions of the Frame ---------
+        def verify_dbms():
+            if id_variable.get() != '' and password_variable.get() != '' and host_variable.get() != '':
+                return_value=DBMS_verification(id_variable.get(),password_variable.get(),host_variable.get())
+                if return_value==None:
+                    messagebox.showinfo("Astra Says","Admin ID verified,DBMS connection successful!")
+                    next_button.config(state=tk.ACTIVE)
+                else:
+                    warning_variable.set(str(return_value))
+                    messagebox.showerror("Astra Says",message=str(return_value))
+            else:
+                messagebox.showerror("Astra Says","Enter all the Details.")
+                
+
+        #------------- Widgets of the Frame --------------------
+        instruction_label=Label(main_frame,bg=background_color,textvariable=instruction_variable,font=(10))
+        instruction_label.place(x=5,y=5)
+        
         
         id_label=Label(master=main_frame,text="Admin Id:",font=(10),bg=background_color)
         id_label.place(x=5,y=35)
@@ -357,29 +409,23 @@ class Admin_setup_page(BaseSetupPage):
         host_entry=Entry2(master=main_frame,textvariable=host_variable,font=(10))
         host_entry.place(x=200,y=105)
         
-        def verify_dbms():
-            if id_variable.get() != '' and password_variable.get() != '' and host_variable.get() != '':
-                return_value=DBMS_verification(id_variable.get(),password_variable.get(),host_variable.get())
-                if return_value==None:
-                    messagebox.showinfo("Astra Says","Admin ID verified,DBMS connection successful!")
-                    next_button.config(state=tk.ACTIVE)
-                else:
-                    warning_variable.set(str(return_value))
-                    messagebox.showerror("Astra Says",message=str(return_value))
-            else:
-                messagebox.showerror("Astra Says","Enter all the Details.")
-                
-            
-
+        
         verify_button=Button(master=main_frame,text="verify connection",relief='groove',command=verify_dbms)
         verify_button.place(x=200,y=140)
 
         #-----------------------3rd part:Button settings---------------------------------------------------------------     
-        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button = Button(self, text="back", relief="groove", width=10,command=switch_pages.switch_back)
         back_button.place(x=370, y=360)
         
-        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
         next_button.place(x=460, y=360)
+        
+        #----------------- Variable to access out of class --------------------------
+        host_value=host_variable.get()
+        id_value=id_variable.get()
+        passowrd_value=password_variable.get()
+        
+page5=Admin_setup_page
 
 
 
@@ -387,7 +433,7 @@ class DBMS_setup_page(BaseSetupPage):
     """
     This class is used to display a DBMS page with a progress bar .
     """
-    def __init__(self,window_object,dbms_setup_functions):
+    def __init__(self,window_object,switch_pages,dbms_setup_functions):
         super().__init__(window_object,page_title="DataBase Setup")
         
         #------------------------------------------- 1st part: main frame ------------------------------------------------
@@ -406,7 +452,7 @@ class DBMS_setup_page(BaseSetupPage):
             messag_variable.set('Data Base is setup on going do not close window')
         
             dbms_status=dbms_setup_functions()
-            progress_percent=5
+            progress_percent=0
             for i in dbms_status.keys():
                 if dbms_status[i]:
                     progressbar_object['value']=progress_percent
@@ -441,10 +487,10 @@ class DBMS_setup_page(BaseSetupPage):
 
         #-----------------------2nd part:Button settings----------------------------
         
-        back_button = Button(self, text="back", relief="groove", width=10)
+        back_button = Button(self, text="back", relief="groove", width=10,command=switch_pages.switch_back)
         back_button.place(x=370, y=365)
         
-        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED)
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
         next_button.place(x=460, y=365)
 
         
@@ -458,7 +504,7 @@ class Cloud_setup_page(Frame):
 
 
 class setup_finish_page(BaseSetupPage):
-     def __init__(self,window_object):
+     def __init__(self,window_object,finish_setup:callable):
         self.window_oject=window_object
         super().__init__(window_object,page_title="Installaiton Finished")
         #-------------------------------------------- Greeting page------------------------------------------------
@@ -472,6 +518,7 @@ class setup_finish_page(BaseSetupPage):
         #-------------------------------------------- button -----------------------------------------------------
 
         def complete_setup():
+            finish_setup()
             time.sleep(0.2)
             window_object.destroy()
             
@@ -487,7 +534,7 @@ if __name__=='__main__':
     root=root.setup_window()
     
     
-    #setup_page=Welcome_page(root)
+    setup_page=Welcome_page(root)
     #terms_condition_page=Terms_condition_page(root)
     #key_page=Software_activation_page(root)
 
