@@ -14,7 +14,7 @@ import mysql.connector
 
 # Backend Modules 
 from Software_backend import *
-from Software_backend.software_setup import Database_setup
+from Software_backend.software_setup import Database_setup,Software_setup
 
 
 #Frontend Modules 
@@ -28,17 +28,8 @@ from Software_UI.software_windows import Window
 
 #-------------------- setup page related funtions --------------------------------
 
-
 setup_frames_list=[]
 current_page=0
-window=Window()
-window_root=window.setup_window()
-setup_page1_object=Welcome_page(window_root)
-setup_frames_list.append(setup_page1_object)
-print(setup_frames_list)
-    
-
-
 class SwitchPages:
     """
     This class contains functions used to switch between pages.
@@ -53,6 +44,15 @@ class SwitchPages:
         frame=setup_frames_list[current_page+1]
         frame.tkrise()
         
+
+window=Window()
+window_root=window.setup_window()
+setup_page1_object=Welcome_page(window_root,SwitchPages)
+setup_frames_list.append(setup_page1_object)
+print(setup_frames_list)
+
+
+
 
 with open('software_info.json') as file_object:
     bootup_info=json.load(file_object)

@@ -6,6 +6,7 @@ This file contains all the code related to the setup window of the software
 
 
 from ast import Name
+from http.client import ImproperConnectionState
 from tkinter import TRUE, Entry, Frame, StringVar, font
 from tkinter import Label
 from tkinter import Button
@@ -433,7 +434,7 @@ class DBMS_setup_page(BaseSetupPage):
     """
     This class is used to display a DBMS page with a progress bar .
     """
-    def __init__(self,window_object,switch_pages,dbms_setup_functions):
+    def __init__(self,window_object,switch_pages,dbms_setup_function:callable):
         super().__init__(window_object,page_title="DataBase Setup")
         
         #------------------------------------------- 1st part: main frame ------------------------------------------------
@@ -451,9 +452,9 @@ class DBMS_setup_page(BaseSetupPage):
         def start_connection():
             messag_variable.set('Data Base is setup on going do not close window')
         
-            dbms_status=dbms_setup_functions()
+            dbms_status=dbms_setup_function()
             progress_percent=0
-            for i in dbms_status.keys():
+            for i in dbms_status():
                 if dbms_status[i]:
                     progressbar_object['value']=progress_percent
                     progressbar_object.update_idletasks()
@@ -530,11 +531,19 @@ class setup_finish_page(BaseSetupPage):
 if __name__=='__main__':
     # Frame Verification tests.
     
+    class testing_switch_pages:
+        @staticmethod
+        def switch_front():
+            pass
+        
+        @staticmethod
+        def switch_back():
+            pass
     root=Window()
     root=root.setup_window()
     
     
-    setup_page=Welcome_page(root)
+    #setup_page=Welcome_page(root)
     #terms_condition_page=Terms_condition_page(root)
     #key_page=Software_activation_page(root)
 
@@ -565,12 +574,17 @@ if __name__=='__main__':
     """
     
     #dbms setup test
-    """
+    
     def verification():
         return {"first function":True,"second function":True}
     
-    frame_object=DBMS_setup_page(root,verification)
-    """
+    from ..Software_backend.software_setup import Software_setup
+    
+    frame_object=DBMS_setup_page(root,testing_switch_pages,Software_setup.Database_setup(host='localhost',
+                                                                    user='test',
+                                                                    passwrod='test',
+                                                                    hospital_name="testing1"))
+    
   
 
     

@@ -10,7 +10,7 @@ import json
 from werkzeug.security import check_password_hash
 
 # Astra libraries
-from . import HostError,WrongUserInformation
+from projectExceptions import HostError,WrongUserInformation
 
 
 class Software_setup:
@@ -72,12 +72,33 @@ class Software_setup:
     
     @staticmethod
     def setup_database(**data):
-        database_setup=Database_setup(data['cursor object'],data['hospital name'])
+        """
+        Function used to setup database using database setup class and it's method.
+        """
+        database_object=mysql.connector.connect(host=data['host'],
+                                                user=data['user'],
+                                                passwd=data['password'])
+        cursor_object=database_object.cursor()
+        database_setup=Database_setup(cursor_object,data['hospital_name'])
+        execution_list=[database_setup.create_database(),
+                        database_setup.use_database(),
+                        database_setup.create_staff_table(),
+                        database_setup.create_departmetns_list(),
+                        database_setup.create_doctors_list(),
+                        database_setup.create_patient_list(),
+                        database_setup.create_pharmacy_info(),
+                        database_setup.create_login_info(),
+                        database_setup.create_appointment_list(),
+                        database_setup.create_medicine_list()
+                        ]
+        return execution_list
         
-   
+       
     @staticmethod
     def finish_setup(*class_objects):
-        pass
+        for i in class_objects:
+            del i
+            
         
 
 
@@ -95,12 +116,12 @@ class Database_setup:
         This function used to create database.
         """
         query=f"""
-        CREATE DATABASE IF NOT EXIST {self.hospital_name};
+        CREATE DATABASE IF NOT EXISTS {self.hospital_name};
         """
         self.cursor_object.execute(query)
         return True
     
-    def using_database(self,**use_database_data):
+    def use_database(self):
         """
         This function used to pass command 'USE DATABASE'.
         """
@@ -131,6 +152,21 @@ class Database_setup:
         registrer_ID VARCHAR(15) NOT NULL,
         user_password VARCHAR(50) NOT NULL,
         login_status BOOLEAN NOT NULL
+        );
+        """
+        self.cursor_object.execute(query)
+        return True
+    
+
+    def create_departmetns_list(self):
+        """
+        Fucntion used to create departments list.
+        """
+        query="""
+        CREATE TABLE departments(
+        dept_id VARCHAR(20) NOT NULL PRIMARY KEY,
+        dept_name VARCHAR(20) NOT NULL ,
+        total_doctors INT 
         );
         """
         self.cursor_object.execute(query)
@@ -188,7 +224,7 @@ class Database_setup:
         return True
         
     
-    def create_loign_info(self):
+    def create_login_info(self):
         """
         Fucntion used to create table storing login info.
         """
@@ -205,19 +241,7 @@ class Database_setup:
         self.cursor_object.execute(query)
         return True
     
-    def create_departmetns_list(self):
-        """
-        Fucntion used to create departments list.
-        """
-        query="""
-        CREATE TABLE departments(
-        dept_id VARCHAR(20) NOT NULL PRIMARY KEY,
-        dept_name VARCHAR(20) NOT NULL ,
-        total_doctors INT 
-        );
-        """
-        self.cursor_object.execute(query)
-        return True
+    
     
     def create_patient_list(self):
         """
@@ -300,6 +324,7 @@ class Database_setup:
     
 
 if __name__=='__main__':
-    key=input("Enter the license key:")
-    print(Software_setup.license_key_verification(key))
+    #key=input("Enter the license key:")
+    #print(Software_setup.license_key_verification(key))
     #Software_setup.register_hospital_name(50)
+    print(Software_setup.setup_database(host='localhost',user='test',password='test',hospital_name="Testing"))
