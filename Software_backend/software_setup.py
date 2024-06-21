@@ -10,7 +10,7 @@ import json
 from werkzeug.security import check_password_hash
 
 # Astra libraries
-from projectExceptions import HostError,WrongUserInformation
+from .projectExceptions import HostError,WrongUserInformation
 
 
 class Software_setup:
@@ -268,12 +268,14 @@ class Database_setup:
         state VARCHAR(20) NOT NULL,
         contry VARCHAR(20) NOT NULL,
         pincode INT NOT NULL,
+        permanent_address VARCHAR(200) NOT NULL,
         initial_problem VARCHAR(200) NOT NULL,
         initial_diagnose VARCHAR(500) NOT NULL,
         department_id VARCHAR(20) NOT NULL,
         doctor_id VARCHAR(20) NOT NULL,
         registrer_id VARCHAR(20) NOT NULL,
         treatment_completed TINYINT DEFAULT 0 ,
+        treatment_conclusion VARCHAR(500),
         FOREIGN KEY (department_id) REFERENCES departments(dept_id),
         FOREIGN KEY (doctor_id) REFERENCES doctors_list(doctor_id),
         FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id)

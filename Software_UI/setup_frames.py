@@ -6,8 +6,8 @@ This file contains all the code related to the setup window of the software
 
 
 from ast import Name
-from http.client import ImproperConnectionState
-from tkinter import TRUE, Entry, Frame, StringVar, font
+
+from tkinter import Entry, Frame, StringVar, font
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton
@@ -35,7 +35,7 @@ import os
 import time
 
 # My liabraries
-from software_windows import Window
+from .software_windows import Window
 
 #---------------------------------------Variable/attributes of file ---------------------------------------
 
@@ -449,12 +449,13 @@ class DBMS_setup_page(BaseSetupPage):
         
         #--------------------------- Functions of the frame ---------------------
 
-        def start_connection():
+        def start_setup():
             messag_variable.set('Data Base is setup on going do not close window')
+            start_button.config(state=tk.DISABLED)
         
             dbms_status=dbms_setup_function()
-            progress_percent=0
-            for i in dbms_status():
+            progress_percent=10
+            for i in dbms_status:
                 if dbms_status[i]:
                     progressbar_object['value']=progress_percent
                     progressbar_object.update_idletasks()
@@ -469,6 +470,7 @@ class DBMS_setup_page(BaseSetupPage):
                         if answer2:
                             window_object.destroy() 
                     return None
+            start_button.destroy()
             messag_variable.set('Database Ready')
             next_button.config(state=tk.ACTIVE)
                             
@@ -482,7 +484,7 @@ class DBMS_setup_page(BaseSetupPage):
         progressbar_object=Progressbar(master=dbms_main_frame,orient="horizontal",length=100,mode="determinate")
         progressbar_object.place(x=25,y=50,width=500,height=25)
         
-        start_button=Button(master=dbms_main_frame,width=10,text="Start",relief="groove",command=start_connection)
+        start_button=Button(master=dbms_main_frame,width=10,text="Start",relief="groove",command=start_setup)
         start_button.place(x=430,y=90)
         
 
@@ -577,15 +579,14 @@ if __name__=='__main__':
     
     def verification():
         return {"first function":True,"second function":True}
-    
+    """
     from ..Software_backend.software_setup import Software_setup
     
     frame_object=DBMS_setup_page(root,testing_switch_pages,Software_setup.Database_setup(host='localhost',
                                                                     user='test',
                                                                     passwrod='test',
                                                                     hospital_name="testing1"))
-    
-  
+    """
 
     
     #greet=setup_finish_page(root)
