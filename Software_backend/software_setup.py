@@ -111,6 +111,17 @@ class Database_setup:
         self.hospital_name=hospital_name
               
     
+    def _execute_query(self,query:str)->str | bool:
+        """
+        Function used to execute queries, and sends error as stirng if any,raised during execution of query.
+        """
+        try:
+            self.cursor_object.execute(query)
+        except Exception as e:
+            return str(e)
+        else:
+            return True
+    
     def create_database(self):
         """
         This function used to create database.
@@ -118,8 +129,8 @@ class Database_setup:
         query=f"""
         CREATE DATABASE IF NOT EXISTS {self.hospital_name};
         """
-        self.cursor_object.execute(query)
-        return True
+        return self._execute_query(query)
+        
     
     def use_database(self):
         """
@@ -129,8 +140,7 @@ class Database_setup:
         query=f"""
         USE {self.hospital_name};
         """
-        self.cursor_object.execute(query)
-        return True
+        return self._execute_query(query)
     
     def create_staff_table(self):
         """
@@ -144,8 +154,8 @@ class Database_setup:
         contact INT NOT NULL,
         contact2 INT ,
         education VARCHAR(100) NOT NULL,
-        current_address VARCHAR(200) NOT NULL,
-        permanent_address VARCHAR(200) NOT NULL,
+        current_address VARCHAR(2000) NOT NULL,
+        permanent_address VARCHAR(2000) NOT NULL,
         post ENUM("IT","recetionist") NOT NULL,
         ID_proof VARCHAR(20) NOT NULL,
         ID_number VARCHAR(25) NOT NULL,
@@ -154,9 +164,7 @@ class Database_setup:
         login_status BOOLEAN NOT NULL
         );
         """
-        self.cursor_object.execute(query)
-        return True
-    
+        return self._execute_query(query)        
 
     def create_departmetns_list(self):
         """
@@ -166,11 +174,10 @@ class Database_setup:
         CREATE TABLE departments(
         dept_id VARCHAR(20) NOT NULL PRIMARY KEY,
         dept_name VARCHAR(20) NOT NULL ,
-        total_doctors INT 
+        total_doctors INT NOT NULL
         );
         """
-        self.cursor_object.execute(query)
-        return True
+        return self._execute_query(query)        
     
     def create_doctors_list(self):
         """
@@ -196,8 +203,7 @@ class Database_setup:
         FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
         );
         """
-        self.cursor_object.execute(query)
-        return True
+        return self._execute_query(query)        
     
     def create_pharmacy_info(self):
         """
@@ -209,8 +215,8 @@ class Database_setup:
         name VARCHAR(50) NOT NULL,
         ID_proof VARCHAR(30) NOT NULL,
         id_no VARCHAR(30) NOT NULL,
-        current_address VARCHAR(200) NOT NULL,
-        permanent_address VARCHAR(200) NOT NULL,
+        current_address VARCHAR(2000) NOT NULL,
+        permanent_address VARCHAR(2000) NOT NULL,
         contact INT NOT NULL,
         contact2 INT,
         education VARCHAR(100) NOT NULL,
@@ -220,9 +226,7 @@ class Database_setup:
         FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id)
         );
         """
-        self.cursor_object.execute(query)
-        return True
-        
+        return self._execute_query(query)    
     
     def create_login_info(self):
         """
@@ -238,10 +242,7 @@ class Database_setup:
         FOREIGN KEY (user_id) REFERENCES pharmacy_info(pharmacist_id)
         );
         """
-        self.cursor_object.execute(query)
-        return True
-    
-    
+        return self._execute_query(query)       
     
     def create_patient_list(self):
         """
@@ -261,16 +262,16 @@ class Database_setup:
         contact_no INT NOT NULL,
         contact_no2 INT,
         house_no VARCHAR(10) NOT NULL,
-        building_name VARCHAR(10) NOT NULL,
-        land_mark varchar(10) NOT NULL,
-        town VARCHAR(20) NOT NULL,
-        district VARCHAR(20) NOT NULL,
-        state VARCHAR(20) NOT NULL,
-        contry VARCHAR(20) NOT NULL,
+        building_name VARCHAR(100) NOT NULL,
+        land_mark varchar(100) NOT NULL,
+        town VARCHAR(50) NOT NULL,
+        district VARCHAR(50) NOT NULL,
+        state VARCHAR(50) NOT NULL,
+        contry VARCHAR(50) NOT NULL,
         pincode INT NOT NULL,
-        permanent_address VARCHAR(200) NOT NULL,
-        initial_problem VARCHAR(200) NOT NULL,
-        initial_diagnose VARCHAR(500) NOT NULL,
+        permanent_address VARCHAR(2000) NOT NULL,
+        initial_problem VARCHAR(2000) NOT NULL,
+        initial_diagnose VARCHAR(5000) NOT NULL,
         department_id VARCHAR(20) NOT NULL,
         doctor_id VARCHAR(20) NOT NULL,
         registrer_id VARCHAR(20) NOT NULL,
@@ -281,8 +282,7 @@ class Database_setup:
         FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id)
         );
         """
-        self.cursor_object.execute(query)
-        return True
+        return self._execute_query(query)        
     
     def create_appointment_list(self):
         """
@@ -301,8 +301,7 @@ class Database_setup:
         FOREIGN KEY (patient_id) REFERENCES patient_list(patient_id)
         );
         """
-        self.cursor_object.execute(query)
-        return True
+        return self._execute_query(query)        
     
     def create_medicine_list(self):
         """
@@ -321,8 +320,8 @@ class Database_setup:
         );
 
         """
-        self.cursor_object.execute(query)
-        return True
+        return self._execute_query(query)
+        
     
 
 if __name__=='__main__':

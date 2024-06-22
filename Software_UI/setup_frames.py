@@ -464,7 +464,8 @@ class DBMS_setup_page(BaseSetupPage):
                 else:
                     answer=messagebox.askretrycancel("Astra Says","DBMS setup unsuccesful !,retry to connect to dbms")
                     if answer:
-                        start_connection()
+                        start_button.config(state=tk.ACTIVE )
+                        start_setup()
                     else:
                         answer2=messagebox.askyesno("Astra Says","Close setup")
                         if answer2:

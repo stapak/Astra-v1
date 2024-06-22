@@ -4,5 +4,6 @@ testing.py
 .vscode/
 .idea/
 Software_UI/test.py
+Software_backend/boot_info.json
 .vs/
 test.py
