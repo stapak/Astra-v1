@@ -216,12 +216,15 @@ class Software_activation_page(BaseSetupPage):
                     message_label3.config(foreground='green')
                     message_variable.set('Key Verified')
                     message_label3.config(textvariable=message_variable)
-                    time.sleep(2)
                     next_button.config(state=tk.ACTIVE)
                 else:
                     message_label3.config(foreground='red')
                     next_button.config(state=tk.DISABLED)
                     message_variable.set('Key Invalid')
+            elif(len(entered_key)>12):
+                message_label3.config(foreground='red')
+                message_variable.set('Key too long') 
+                
             else:
                 message_label3.config(foreground='black')
                 next_button.config(state=tk.DISABLED)
@@ -304,7 +307,7 @@ class Name_registration_page(BaseSetupPage):
 
         #------ functions of frame--------------
         def name_checking(name):
-            if (name.isalpha() or name==" ")and len(name)>3 :
+            if (name.isalpha() or name.isspace())and len(name)>3 :
                 message_variable2.set('Name Valid')
                 message_label3.config(foreground='green')
                 next_button.config(state=tk.ACTIVE)
@@ -319,8 +322,12 @@ class Name_registration_page(BaseSetupPage):
         registered_function=window_object.register(name_checking)
         
         def register_name_function():
+            next_button.config(state=tk.DISABLED)
+            message_variable2.set('please wait')
             register_name(name_varible.get())
-            switch_pages.switch_front
+            time.sleep(1)
+            switch_pages.switch_front()
+            next_button.config(state=tk.ACTIVE)
 
         #-------- Widgets of the frame -------------------
         message_label=Label(master=main_frame,textvariable=message_variable,bg=background_color,font=(15))
@@ -421,11 +428,7 @@ class Admin_setup_page(BaseSetupPage):
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
         next_button.place(x=460, y=360)
         
-        #----------------- Variable to access out of class --------------------------
-        host_value=host_variable.get()
-        id_value=id_variable.get()
-        passowrd_value=password_variable.get()
-        
+
 page5=Admin_setup_page
 
 

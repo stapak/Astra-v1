@@ -14,6 +14,21 @@ class IT_head_functions:
     """
     Class contains all the functions used by IT head.
     """
+    
+        
+    @staticmethod
+    def execute_query(cursor_object,query)->str | bool:
+        """
+        Function used to execute queries, and sends error as stirng if any,raised during execution of query.
+        """
+        try:
+            cursor_object.execute(query)
+        except Exception as e:
+            return str(e)
+        else:
+            return True
+    
+
     @staticmethod
     def add_departments(**data):
         """
@@ -30,14 +45,7 @@ class IT_head_functions:
         '{dept_id}','{data['department name']}',{data['total doctors']}
         );
         """
-        try:
-            cursor_object.execute(query)
-        except Exception as e:
-            return str(e)
-        
-        else:
-            return True
-        
+        return IT_head_functions.execute_query(cursor_object,query)
        
     @staticmethod
     def add_hospital_staff(**data):
@@ -45,17 +53,16 @@ class IT_head_functions:
         Function used to add hospital staff such as receptionist.
         """
         cursor_object=data['cursor object']
-        query="""
-
+        dept_id=ID_generator()
+        query=f"""
+        INSERT INTO departments
+        (dept_id,dept_name,total_doctors)
+        VALUES
+        (
+        '{dept_id}','{data['department name']}',{data['total doctors']}
+        );
         """
-        try:
-            cursor_object.execute(query)
-        except Exception as e:
-            return str(e)
-        
-        else:
-            return True
-        pass
+        return IT_head_functions.execute_query(cursor_object,query)
     
     @staticmethod
     def add_doctors_list(**data):
@@ -63,17 +70,16 @@ class IT_head_functions:
         Function used to enter the doctors to the doctors list.
         """
         cursor_object=data['cursor object']
-        query="""
-
+        dept_id=ID_generator()
+        query=f"""
+        INSERT INTO departments
+        (dept_id,dept_name,total_doctors)
+        VALUES
+        (
+        '{dept_id}','{data['department name']}',{data['total doctors']}
+        );
         """
-        cursor_object.execute(query)
-        try:
-            cursor_object.execute(query)
-        except Exception as e:
-            return str(e)
-        
-        else:
-            return True
+        return IT_head_functions.execute_query(cursor_object,query)
         
     
     @staticmethod
@@ -82,16 +88,16 @@ class IT_head_functions:
         Funcitons used to enter pharmacist to the list
         """
         cursor_object=data['cursor object']
-        query="""
-
+        dept_id=ID_generator()
+        query=f"""
+        INSERT INTO departments
+        (dept_id,dept_name,total_doctors)
+        VALUES
+        (
+        '{dept_id}','{data['department name']}',{data['total doctors']}
+        );
         """
-        try:
-            cursor_object.execute(query)
-        except Exception as e:
-            return str(e)
-        
-        else:
-            return True
+        return IT_head_functions.execute_query(cursor_object,query)
         
     
     @staticmethod
@@ -100,16 +106,16 @@ class IT_head_functions:
         Function used by IT to help other change their forgotten password.
         """
         cursor_object=data['cursor object']
-        query="""
-
+        dept_id=ID_generator()
+        query=f"""
+        INSERT INTO departments
+        (dept_id,dept_name,total_doctors)
+        VALUES
+        (
+        '{dept_id}','{data['department name']}',{data['total doctors']}
+        );
         """
-        try:
-            cursor_object.execute(query)
-        except Exception as e:
-            return str(e)
-        
-        else:
-            return True
+        return IT_head_functions.execute_query(cursor_object,query)
 
     
 

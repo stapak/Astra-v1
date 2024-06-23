@@ -57,8 +57,8 @@ class Software_setup:
     def database_verification(**data):
         try:
             database_object=mysql.connector.connect(host=data['host'],
-                                                user=data['host'],
-                                                passwd=data['password'])
+                                                user=data['user id'],
+                                                passwd=data['user password'])
         except mysql.connector.errors.ProgrammingError:
             return WrongUserInformation
         except mysql.connector.errors.DatabaseError:
@@ -76,10 +76,10 @@ class Software_setup:
         Function used to setup database using database setup class and it's method.
         """
         database_object=mysql.connector.connect(host=data['host'],
-                                                user=data['user'],
-                                                passwd=data['password'])
+                                                user=data['user id'],
+                                                passwd=data['user password'])
         cursor_object=database_object.cursor()
-        database_setup=Database_setup(cursor_object,data['hospital_name'])
+        database_setup=Database_setup(cursor_object,data['hospital name'])
         execution_list=[database_setup.create_database(),
                         database_setup.use_database(),
                         database_setup.create_staff_table(),
@@ -91,6 +91,8 @@ class Software_setup:
                         database_setup.create_appointment_list(),
                         database_setup.create_medicine_list()
                         ]
+        database_object.commit()
+        database_object.close()
         return execution_list
         
        
@@ -130,7 +132,6 @@ class Database_setup:
         CREATE DATABASE IF NOT EXISTS {self.hospital_name};
         """
         return self._execute_query(query)
-        
     
     def use_database(self):
         """
@@ -151,16 +152,16 @@ class Database_setup:
         staff_id VARCHAR(20) PRIMARY KEY NOT NULL,
         name VARCHAR(50) NOT NULL,
         date_of_birth DATE NOT NULL,
-        contact INT NOT NULL,
-        contact2 INT ,
+        contact double NOT NULL,
+        contact2 double,
         education VARCHAR(100) NOT NULL,
         current_address VARCHAR(2000) NOT NULL,
         permanent_address VARCHAR(2000) NOT NULL,
-        post ENUM("IT","recetionist") NOT NULL,
+        post ENUM("IT","receptionist") NOT NULL,
         ID_proof VARCHAR(20) NOT NULL,
         ID_number VARCHAR(25) NOT NULL,
         registrer_ID VARCHAR(15) NOT NULL,
-        user_password VARCHAR(50) NOT NULL,
+        user_password VARCHAR(500) NOT NULL,
         login_status BOOLEAN NOT NULL
         );
         """
@@ -189,14 +190,14 @@ class Database_setup:
         name VARCHAR(50) NOT NULL,
         ID_proof VARCHAR(30) NOT NULL,
         id_no VARCHAR(30) NOT NULL,
-        current_address VARCHAR(200) NOT NULL,
-        permanent_address VARCHAR(200) NOT NULL,
-        contact INT NOT NULL,
-        contact2 INT,
-        education VARCHAR(100) NOT NULL,
+        current_address VARCHAR(2000) NOT NULL,
+        permanent_address VARCHAR(2000) NOT NULL,
+        contact double NOT NULL,
+        contact2 double,
+        education VARCHAR(200) NOT NULL,
         post VARCHAR(20) NOT NULL,
         registrer_id VARCHAR(20) NOT NULL,
-        password VARCHAR(30) NOT NULL,
+        password VARCHAR(500) NOT NULL,
         login_status BOOLEAN NOT NULL,
         dept_id VARCHAR(20) NOT NULL,
         FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id),
@@ -217,11 +218,11 @@ class Database_setup:
         id_no VARCHAR(30) NOT NULL,
         current_address VARCHAR(2000) NOT NULL,
         permanent_address VARCHAR(2000) NOT NULL,
-        contact INT NOT NULL,
-        contact2 INT,
+        contact double NOT NULL,
+        contact2 double,
         education VARCHAR(100) NOT NULL,
         registrer_id VARCHAR(20) NOT NULL,
-        password VARCHAR(30) NOT NULL,
+        password VARCHAR(500) NOT NULL,
         login_status BOOLEAN NOT NULL,
         FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id)
         );
@@ -259,8 +260,8 @@ class Database_setup:
         proof_no VARCHAR(20) NOT NULL,
         blood_group VARCHAR(3) NOT NULL,
         gender VARCHAR(10) NOT NULL,
-        contact_no INT NOT NULL,
-        contact_no2 INT,
+        contact_no double NOT NULL,
+        contact_no2 double,
         house_no VARCHAR(10) NOT NULL,
         building_name VARCHAR(100) NOT NULL,
         land_mark varchar(100) NOT NULL,
