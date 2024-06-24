@@ -130,21 +130,6 @@ def start_setup():
 
     
 
-
-
-
-with open('software_info.json') as file_object:
-    bootup_info=json.load(file_object)
-
-
-# If 'setup_complete' variable has true value then bootup software will be called.
-if bootup_info['setup_complete']:
-    pass
-else:
-    pass
-
-
-
 if __name__=='__main__':
     start_setup()
     pass

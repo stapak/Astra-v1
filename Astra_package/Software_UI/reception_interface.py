@@ -4,7 +4,7 @@ This file contains frames related to all the work of the receptionist.
 """
 
 # tkinter libraries
-from tkinter import  Frame, LabelFrame, Place, font
+from tkinter import  Frame, LabelFrame, Place
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton

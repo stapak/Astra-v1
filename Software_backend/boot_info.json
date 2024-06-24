@@ -1,7 +1,0 @@
-{    
-    "first_boot":true,
-    "DataBase_Ready":false,
-    "Cloud_storage_ready":false,
-    "Hospital_Name":null,
-    "Hospital_lienced":false
-}
