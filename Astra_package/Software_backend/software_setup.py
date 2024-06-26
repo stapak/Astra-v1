@@ -8,9 +8,13 @@ import os
 import mysql.connector
 import json
 from werkzeug.security import check_password_hash
+from pathlib import PurePosixPath
 
 # Astra libraries
 from .projectExceptions import HostError,WrongUserInformation
+
+#Astra Variables 
+from . import _SOFTWARE_INFO_FILE_PATH
 
 
 class Software_setup:
@@ -39,12 +43,44 @@ class Software_setup:
         return False
     
     @staticmethod
+    def set_file_path(setup_type,raw_file_location):
+        """
+        Function used to set path variable based on new file or recovery setup
+        
+        file_location: this argument gives file path in linux oprating system
+        which is coverted using 'coversion mechanism' to windows path
+        """
+        # CONVERSION MECHANISM.
+        path=PurePosixPath(raw_file_location)
+        converted_path=path.parts
+        
+        global _SOFTWARE_INFO_FILE_PATH
+        info_dictionary={
+            'hospital name':None,
+            'Hospital_Name': None,
+            'Hospital_lienced': False,
+            'host':None
+            }
+        if setup_type=="FRESH":
+            try:
+                file_location='\\'.join(converted_path)+"\software_information.json"
+                _SOFTWARE_INFO_FILE_PATH=file_location                
+                with open(_SOFTWARE_INFO_FILE_PATH,'x') as fobj:
+                    json.dump(info_dictionary,fobj,indent=6)
+            except Exception as e:
+                return str(e)
+        else:
+            _SOFTWARE_INFO_FILE_PATH=raw_file_location
+            
+    
+    @staticmethod
     def register_hospital_name(hospital_name:str):
         """
         This function will be used inside 'setup software' file's 'register hospital name' frame. 
         This register hospital name        
         """
-        jsonfile=os.path.join(os.path.dirname(os.path.realpath(__file__)),'boot_info.json')
+        global _SOFTWARE_INFO_FILE_PATH
+        jsonfile=_SOFTWARE_INFO_FILE_PATH
         with open(jsonfile,encoding='utf-8' ) as jsonobj:
             boot_info=json.load(jsonobj)
         
@@ -79,8 +115,9 @@ class Software_setup:
                                                 user=data['user id'],
                                                 passwd=data['user password'])
         cursor_object=database_object.cursor()
-        database_setup=Database_setup(cursor_object,data['hospital name'])
-        execution_list=[database_setup.create_database(),
+        database_setup=_Database_setup(cursor_object,data['hospital name'])
+        execution_list=[
+                        database_setup.create_database(),
                         database_setup.use_database(),
                         database_setup.create_staff_table(),
                         database_setup.create_departmetns_list(),
@@ -104,7 +141,7 @@ class Software_setup:
         
 
 
-class Database_setup:
+class _Database_setup:
     """
     This class contains all the methods to setup database.
     """
@@ -329,4 +366,5 @@ if __name__=='__main__':
     #key=input("Enter the license key:")
     #print(Software_setup.license_key_verification(key))
     #Software_setup.register_hospital_name(50)
-    print(Software_setup.setup_database(host='localhost',user='test',password='test',hospital_name="Testing"))
+    #print(Software_setup.setup_database(host='localhost',user='test',password='test',hospital_name="Testing"))
+    print(_SOFTWARE_INFO_FILE_PATH)

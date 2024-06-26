@@ -2,7 +2,7 @@
 This file has functions to start in various formats such as 'setup software','run software' etc.
 """
 
-#-------------------------------------------------- Modules ---------------------------------------------------------------------------------
+#-------------------------------------------------- Modules ----------------------------------------
 
 #----------------------------------Built in liabraries--------------
 
@@ -14,15 +14,15 @@ import mysql.connector
 #-------------------------- Astra modules ------------------------------------------
 
 # Backend Modules 
-from Software_backend.software_setup import Software_setup
+from .Software_backend.software_setup import Software_setup
+from . import frames_list
 
 
 #Frontend Modules 
-from Software_UI import setup_frames
-from Software_UI.software_windows import Window
+from .Software_UI import setup_frames
+from .Software_UI.software_windows import Window
 
 
-#--------------------------- Actual code -------------------------------------------------------------------------------------------
 
 
 #-------------------- setup page related funtions --------------------------------
@@ -32,7 +32,7 @@ Created a common frames list which is base for all software function depending o
 added to this list by other function.
 
 """
-frames_list=[]
+
 
 current_page=0
 class SwitchPages:
@@ -72,44 +72,49 @@ def start_setup():
     #Initailizing 2nd page.
     setup_page_2=setup_frames.Terms_condition_page(window_object,SwitchPages)
     
-    #Initailizing 3rd page.
+    #Initializing 3rd page.
     def mediator_function_3rd(key):
         return Software_setup.license_key_verification(key)
     setup_page_3=setup_frames.Software_activation_page(window_object,SwitchPages,verify_function=mediator_function_3rd)
     
-    #Initializing 4th page
+    # Initializing 4th page
+    def mediator_function_4th(setup_type,filelocation):
+        return Software_setup.set_file_path(setup_type,filelocation)
+    setup_page_4=setup_frames.Setup_type(window_object,SwitchPages,configure_path=mediator_function_4th)
+    
+    #Initializing 5th page
     global hospital_name
-    def mediator_function_4th(name):
+    def mediator_function_5th(name):
         global hospital_name
         hospital_name=name
         Software_setup.register_hospital_name(name)
-    setup_page_4=setup_frames.Name_registration_page(window_object,SwitchPages,register_name=mediator_function_4th)
+    setup_page_5=setup_frames.Name_registration_page(window_object,SwitchPages,register_name=mediator_function_5th)
     
-    #Initializing 5th page
+    #Initializing 6th page
     user_data={}
-    def mediator_function_5th(id,password,host):
+    def mediator_function_6th(id,password,host):
         global user_data
         
         user_data={'host':host,
                    'user id':id,'user password':password}
         return Software_setup.database_verification(**user_data)
         
-    setup_page_5=setup_frames.Admin_setup_page(window_object,SwitchPages,DBMS_verification=mediator_function_5th)
+    setup_page_6=setup_frames.Admin_setup_page(window_object,SwitchPages,DBMS_verification=mediator_function_6th)
 
-    #Initializing 6th page.
-    def mediator_function_6th():
+    #Initializing 7th page.
+    def mediator_function_7th():
         global user_data
         global hospital_name
         user_data['hospital name']=hospital_name
         return Software_setup.setup_database(**user_data)
-    setup_page_6=setup_frames.DBMS_setup_page(window_object,SwitchPages,dbms_setup_function=mediator_function_6th)
+    setup_page_7=setup_frames.DBMS_setup_page(window_object,SwitchPages,dbms_setup_function=mediator_function_7th)
     
-    #Initializing 7th page.
+    #Initializing 8th page.
     def mediator_function_8th():
         frames_list[0:6]
         del frames_list[0]#this line will be executed after all elements of list are deleted hence last page will be of index 0.
         return None
-    setup_page_7=setup_frames.setup_finish_page(window_object,finish_setup=mediator_function_8th)
+    setup_page_8=setup_frames.setup_finish_page(window_object,finish_setup=mediator_function_8th)
 
     # Adding every frame to list.
     frames_list.append(setup_page_1)
@@ -119,6 +124,7 @@ def start_setup():
     frames_list.append(setup_page_5)
     frames_list.append(setup_page_6)
     frames_list.append(setup_page_7)
+    frames_list.append(setup_page_8)
    
    
     

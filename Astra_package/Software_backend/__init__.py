@@ -14,7 +14,7 @@ def ID_generator():
     return generated_id
 
 
-# Software information containing file's path storage variable.
+# Inside '_SOFTWARE_INFO_FILE_PATH' variable json file (containing basic info of software) path will be stored.
 _SOFTWARE_INFO_FILE_PATH=None
 
     

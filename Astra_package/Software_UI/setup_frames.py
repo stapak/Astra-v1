@@ -36,7 +36,7 @@ import os
 import time
 
 # My liabraries
-from software_windows import Window
+from .software_windows import Window
 
 #---------------------------------------Variable/attributes of file ---------------------------------------
 
@@ -275,7 +275,10 @@ class Software_activation_page(BaseSetupPage):
 
 class Setup_type(BaseSetupPage):
     """
-    This class is used to Ask user about the type of installations.
+    This class is used to Ask user about the type of installations. 
+    User get's two type of installation one for fresh installation for creating new json file and storing basic information,
+    another option to retrive the information from a pre exsisting json file and use it.
+    
     2nd frame:used to ask question and get answer in form of radio buttons.
     3rd frame:used to display the file for recovery.
     4th frame: used to display the locations to store file for fresh installation.
@@ -297,6 +300,10 @@ class Setup_type(BaseSetupPage):
 
         # ------------- Frame functions
         def activate_selection():
+            """
+            This function is used to activate or disable the option that user has not selected and activate the option the
+            user has selected.
+            """
             if installation_type_variable.get()=="FRESH":
                 
                 status_of_recovery_frame=tk.DISABLED
@@ -328,6 +335,40 @@ class Setup_type(BaseSetupPage):
                 file_location_label2.config(state=status_of_recovery_frame)
                 location_button2.config(state=status_of_recovery_frame)
                 
+        def path_selector():
+            """
+            This function used to ask directory or file based on choice and call configure path function
+            and if error is received then return that error in message box.
+            
+            """
+            if installation_type_variable.get()=="FRESH":
+                """
+                This part is used to select a location for new file and send the path to configure path function.
+                
+                """
+                file_location=filedialog.askdirectory(title='Enter the location to store file',initialdir="C:/")
+                file_location_variable.set(file_location)
+               
+                recieved_error=configure_path("FRESH",file_location)
+                
+            else:
+                """
+                This part is used to select file path and send that path to configure path function.
+                """
+                file_types=(("json files ",'*.json'),)
+                file_location=filedialog.askopenfilename(title='Enter the file for recovery installtion',initialdir="C:/",filetypes=file_types)
+                file_location_variable2.set(file_location)
+                recieved_error=configure_path("RECOVERY",file_location)
+               
+            
+            if recieved_error == None:
+                messagebox.showinfo(title='Astra Says',message="Setup was successful !")
+                next_button.config(state=tk.ACTIVE)
+            else:
+                messagebox.showerror(title='Astra Says',message=str(recieved_error))
+                
+            
+        
                 
        
         # ------------- widgets of the frame. --------------------------------
@@ -352,19 +393,7 @@ class Setup_type(BaseSetupPage):
         # ------------- Frame variable
         file_location_variable=StringVar(value="No file selected.")
         status_of_new_frame=tk.DISABLED
-        
-        # ------------- Frame Function
-        def location_selector():
-            """
-            This function is used to select a location for new file and send the path to configure path function.
-            
-            """
-            file_location=filedialog.askdirectory(title='Enter the location to store file')
-            file_location_variable.set(file_location)
-            configure_path(file_location)
-            next_button.config(state=tk.ACTIVE)
-
-        
+                
         # ------------- Frame widgets
         new_message_label=Label(new_installtion_frame,text="select location to save configuration file.",
                                      state=status_of_new_frame,background=background_color)
@@ -378,7 +407,7 @@ class Setup_type(BaseSetupPage):
         file_location_label.place(x=100,y=30)
 
         location_button=Button(new_installtion_frame,text='Select',relief='groove',background=background_color,
-                               command=location_selector,state=status_of_new_frame)
+                               command=path_selector,state=status_of_new_frame)
         location_button.place(x=450,y=45,width=80)
         
 
@@ -391,18 +420,8 @@ class Setup_type(BaseSetupPage):
         # ------------- Frame variable
         status_of_recovery_frame=tk.DISABLED
         file_location_variable2=StringVar(value="No file selected.")
-        
-        # ------------- Frame Function
-        def file_selector():
-            """
-            This function is used to select file path and send that path to configure path function.
-            """
-            file_types=(("json files ",'*.json'),)
-            file_location=filedialog.askopenfilename(title='Enter the file for new installtion',filetypes=file_types)
-            file_location_variable2.set(file_location)
-            configure_path(file_location)
-            next_button.config(state=tk.ACTIVE)
-        
+       
+       # widgets of the frame        
         recovery_message_label=Label(recovery_installtion_frame,text="select the '.json' file of software.",state=status_of_recovery_frame,background=background_color)
         recovery_message_label.place(x=5,y=5)
         
@@ -413,7 +432,7 @@ class Setup_type(BaseSetupPage):
         file_location_label2.place(x=100,y=30)
 
         location_button2=Button(recovery_installtion_frame,text='Select',relief='groove',background=background_color,
-                               command=file_selector,state=status_of_recovery_frame)
+                               command=path_selector,state=status_of_recovery_frame)
         location_button2.place(x=450,y=45,width=80)
         
 
