@@ -8,7 +8,7 @@ Aim : A Medical software to manage hospital staff and hospital services.
 
 ## Working :
 1. ***User Interface*** is constructed using python tkinter library, and UI modules are packed in **Software_UI** subpackage.
-1. ***Backend*** is constructed using python and MySQL-connector and Backend modules are packed in **Software_backend subpackage.
+1. ***Backend*** is constructed using python and MySQL-connector and Backend modules are packed in **Software_backend** subpackage.
 1. ***Database*** Database is based on **MySQL** database,queries are written inside functions and when funtions are invoked queries are executed. 
 
 
