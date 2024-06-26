@@ -18,9 +18,8 @@ from Software_backend.software_setup import Software_setup
 
 
 #Frontend Modules 
-import Software_UI.setup_frames as setup_frames
+from Software_UI import setup_frames
 from Software_UI.software_windows import Window
-
 
 
 #--------------------------- Actual code -------------------------------------------------------------------------------------------

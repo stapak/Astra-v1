@@ -4,10 +4,7 @@ This file contains all the code related to the setup window of the software
 
 # Tkinter  liabraries
 
-
-from ast import Name
-
-from tkinter import Entry, Frame, StringVar, font
+from tkinter import Entry, Frame, Variable, font
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton
@@ -16,14 +13,18 @@ from tkinter import Scrollbar
 from tkinter import PhotoImage
 import tkinter as tk
 from tkinter import Listbox
-from tkinter import IntVar
+from tkinter import IntVar, StringVar
 from tkinter import messagebox
+from tkinter import simpledialog,filedialog
+from tkinter import LabelFrame
 
 from tkinter.ttk import Checkbutton as Checkbutton2
 from tkinter.ttk import Entry as Entry2
 from tkinter.ttk import Scrollbar as Scrollbar2
 from tkinter.ttk import Button as Button2
 from tkinter.ttk import Progressbar
+from tkinter.ttk import Radiobutton
+from tkinter.ttk import Style
 
 
 
@@ -35,13 +36,16 @@ import os
 import time
 
 # My liabraries
-from .software_windows import Window
+from software_windows import Window
 
 #---------------------------------------Variable/attributes of file ---------------------------------------
 
 background_color="#DCDCDC"
 basic_font=('Lucida Console',15) 
 entry_font=('Lucida Console',12)
+normal_bold_font=("Arial",15,"bold")
+normal_font=("Arial",10)
+
 
 with open( os.path.join(os.path.dirname(os.path.realpath(__file__)),'setup_page_info.json'),encoding='utf-8' ) as fobj:
     setup_info=json.load(fobj)["welcome_greeting"]
@@ -111,9 +115,6 @@ class Welcome_page(Frame):
         next_button.place(x=460,y=360)
 
 
-page1=Welcome_page
-
-
 
 class Terms_condition_page(BaseSetupPage):
     """
@@ -175,9 +176,7 @@ class Terms_condition_page(BaseSetupPage):
         back_button.place(x=370, y=370)
         
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
-        next_button.place(x=460, y=370)
-
-page2=Terms_condition_page        
+        next_button.place(x=460, y=370)     
 
 
 
@@ -272,9 +271,165 @@ class Software_activation_page(BaseSetupPage):
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
         next_button.place(x=460, y=360)
 
-page3=Software_activation_page
 
 
+class Setup_type(BaseSetupPage):
+    """
+    This class is used to Ask user about the type of installations.
+    2nd frame:used to ask question and get answer in form of radio buttons.
+    3rd frame:used to display the file for recovery.
+    4th frame: used to display the locations to store file for fresh installation.
+    """
+    def __init__(self, window_object,switch_pages=None,configure_path=None):
+        super().__init__(window_object, page_title="Installation Type")
+        
+
+
+        #------------------------------ 2nd frame: Recover and fresh setup frame --------------------------
+        option_frame=Frame(self,background=background_color,width=550,height=70)
+        option_frame.place(x=0,y=71)
+        
+        # ------------- Frame variable
+        
+        #variable to store radiobutton value
+        installation_type_variable=StringVar()
+       
+
+        # ------------- Frame functions
+        def activate_selection():
+            if installation_type_variable.get()=="FRESH":
+                
+                status_of_recovery_frame=tk.DISABLED
+                
+                location_label2.config(state=status_of_recovery_frame)
+                recovery_message_label.config(state=status_of_recovery_frame)
+                file_location_label2.config(state=status_of_recovery_frame)
+                location_button2.config(state=status_of_recovery_frame)
+                
+                status_of_new_frame=tk.ACTIVE
+                
+                location_label.config(state=status_of_new_frame)
+                new_message_label.config(state=status_of_new_frame)
+                file_location_label.config(state=status_of_new_frame)
+                location_button.config(state=status_of_new_frame)
+                
+            else:
+                status_of_new_frame=tk.DISABLED
+                
+                location_label.config(state=status_of_new_frame)
+                new_message_label.config(state=status_of_new_frame)
+                file_location_label.config(state=status_of_new_frame)
+                location_button.config(state=status_of_new_frame)
+                
+                status_of_recovery_frame=tk.ACTIVE
+                
+                location_label2.config(state=status_of_recovery_frame)
+                recovery_message_label.config(state=status_of_recovery_frame)
+                file_location_label2.config(state=status_of_recovery_frame)
+                location_button2.config(state=status_of_recovery_frame)
+                
+                
+       
+        # ------------- widgets of the frame. --------------------------------
+        question_lable=Label(option_frame,text="Tell us about the installation type",background=background_color,font=("Arial",15))
+        question_lable.place(x=5,y=5)
+        
+        radiobutton_style=Style(option_frame)
+        radiobutton_style.configure("op.TRadiobutton",background=background_color,font=("Arial",12))
+        
+        new_installtion_button=Radiobutton(option_frame,text="New installation",style="op.TRadiobutton",value="FRESH",variable=installation_type_variable,command=activate_selection)
+        new_installtion_button.place(x=10,y=40)
+        
+        Recovery_installtion_button=Radiobutton(option_frame,text="Recovery installation",style="op.TRadiobutton",variable=installation_type_variable,value="RECOVER",command=activate_selection)
+        Recovery_installtion_button.place(x=250,y=40)
+        
+
+
+        # ----------------------- 3rd Frame: frame for Fresh installation   ----------------------------------
+        new_installtion_frame=LabelFrame(self,background=background_color,width=550,height=100,text="Fresh Installation")
+        new_installtion_frame.place(x=0,y=141)
+        
+        # ------------- Frame variable
+        file_location_variable=StringVar(value="No file selected.")
+        status_of_new_frame=tk.DISABLED
+        
+        # ------------- Frame Function
+        def location_selector():
+            """
+            This function is used to select a location for new file and send the path to configure path function.
+            
+            """
+            file_location=filedialog.askdirectory(title='Enter the location to store file')
+            file_location_variable.set(file_location)
+            configure_path(file_location)
+            next_button.config(state=tk.ACTIVE)
+
+        
+        # ------------- Frame widgets
+        new_message_label=Label(new_installtion_frame,text="select location to save configuration file.",
+                                     state=status_of_new_frame,background=background_color)
+        new_message_label.place(x=5,y=5)
+        
+        location_label=Label(new_installtion_frame,text="location of file :",state=status_of_new_frame,background=background_color)
+        location_label.place(x=10,y=30)
+        
+
+        file_location_label=Label(new_installtion_frame,textvariable=file_location_variable,state=status_of_new_frame,background=background_color)
+        file_location_label.place(x=100,y=30)
+
+        location_button=Button(new_installtion_frame,text='Select',relief='groove',background=background_color,
+                               command=location_selector,state=status_of_new_frame)
+        location_button.place(x=450,y=45,width=80)
+        
+
+
+        # ----------------------- 4th Frame: frame for recover installation -----------------------------------
+        
+        recovery_installtion_frame=LabelFrame(self,background=background_color,width=550,height=100,text="Recovery Installation")
+        recovery_installtion_frame.place(x=0,y=251)
+        
+        # ------------- Frame variable
+        status_of_recovery_frame=tk.DISABLED
+        file_location_variable2=StringVar(value="No file selected.")
+        
+        # ------------- Frame Function
+        def file_selector():
+            """
+            This function is used to select file path and send that path to configure path function.
+            """
+            file_types=(("json files ",'*.json'),)
+            file_location=filedialog.askopenfilename(title='Enter the file for new installtion',filetypes=file_types)
+            file_location_variable2.set(file_location)
+            configure_path(file_location)
+            next_button.config(state=tk.ACTIVE)
+        
+        recovery_message_label=Label(recovery_installtion_frame,text="select the '.json' file of software.",state=status_of_recovery_frame,background=background_color)
+        recovery_message_label.place(x=5,y=5)
+        
+        location_label2=Label(recovery_installtion_frame,text="location of file :",state=status_of_new_frame,background=background_color)
+        location_label2.place(x=10,y=30)
+        
+        file_location_label2=Label(recovery_installtion_frame,textvariable=file_location_variable2,state=status_of_recovery_frame,background=background_color)
+        file_location_label2.place(x=100,y=30)
+
+        location_button2=Button(recovery_installtion_frame,text='Select',relief='groove',background=background_color,
+                               command=file_selector,state=status_of_recovery_frame)
+        location_button2.place(x=450,y=45,width=80)
+        
+
+        #---------- 5th frame: frame containing next and back button -----------------
+        back_button = Button(self, text="back", relief="groove", width=10,command=switch_pages.switch_back)
+        back_button.place(x=370, y=360)
+        
+        next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
+        next_button.place(x=460, y=360)
+
+        
+
+
+
+        
+#-------------- Frames for new setup -----------------
 
 class Name_registration_page(BaseSetupPage):
     """
@@ -350,8 +505,6 @@ class Name_registration_page(BaseSetupPage):
         
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=register_name_function)
         next_button.place(x=460, y=360)
-
-page4=Name_registration_page
 
 
 
@@ -429,9 +582,6 @@ class Admin_setup_page(BaseSetupPage):
         next_button.place(x=460, y=360)
         
 
-page5=Admin_setup_page
-
-
 
 class DBMS_setup_page(BaseSetupPage):
     """
@@ -500,8 +650,9 @@ class DBMS_setup_page(BaseSetupPage):
         next_button = Button(self, text="Next", relief="groove", width=10 ,state=tk.DISABLED,command=switch_pages.switch_front)
         next_button.place(x=460, y=365)
 
-        
-   
+
+
+#-------------- Frames for recover setup ---------------       
 class Cloud_setup_page(Frame):
     """
     Page used to setup cloud server.
@@ -580,10 +731,10 @@ if __name__=='__main__':
     """
     
     #dbms setup test
-    
+    """
     def verification():
         return {"first function":True,"second function":True}
-    """
+   
     from ..Software_backend.software_setup import Software_setup
     
     frame_object=DBMS_setup_page(root,testing_switch_pages,Software_setup.Database_setup(host='localhost',
@@ -592,6 +743,9 @@ if __name__=='__main__':
                                                                     hospital_name="testing1"))
     """
 
+    # setup_type page test.
+    setup_type_page=Setup_type(root,testing_switch_pages)
+    
     
     #greet=setup_finish_page(root)
     root.mainloop()

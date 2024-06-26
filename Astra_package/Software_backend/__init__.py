@@ -1,5 +1,6 @@
 """
-contains general functions of the backend
+contains general functions of the backend.
+
 """
 
 
@@ -11,6 +12,11 @@ def ID_generator():
     id_joined=''.join(id_sliced)
     generated_id=id_joined[0:20]
     return generated_id
+
+
+# Software information containing file's path storage variable.
+_SOFTWARE_INFO_FILE_PATH=None
+
     
 if __name__=='__main__':
     pass
