@@ -10,13 +10,11 @@ import json
 from werkzeug.security import check_password_hash
 from pathlib import PurePosixPath
 
-# Astra libraries
+# Astra libraries and attributes.
 from .projectExceptions import HostError,WrongUserInformation
-
-#Astra Variables 
 from . import _SOFTWARE_INFO_FILE_PATH
 
-
+boot_file=str(_SOFTWARE_INFO_FILE_PATH)
 class Software_setup:
     """
     This class contains all the functions necessary for seting up software.
@@ -31,14 +29,7 @@ class Software_setup:
         with open(jsonfile,encoding='utf-8' ) as jsonobj:
             license_keys=json.load(jsonobj)["license keys"]
         for key in license_keys:
-            if check_password_hash(key,license_key):
-                jsonfile2=os.path.join(os.path.dirname(os.path.realpath(__file__)),'boot_info.json')
-                with open(jsonfile2,encoding='utf-8' ) as jsonobj:
-                    boot_info=json.load(jsonobj)
-                boot_info["Hospital_lienced"]=True
-                with open(jsonfile2,'w',encoding='utf-8') as jsonobj:
-                    json.dump(boot_info,jsonobj,indent=6)
-
+            if check_password_hash(key,license_key):        
                 return True
         return False
     
@@ -54,24 +45,32 @@ class Software_setup:
         path=PurePosixPath(raw_file_location)
         converted_path=path.parts
         
-        global _SOFTWARE_INFO_FILE_PATH
+        
         info_dictionary={
-            'hospital name':None,
             'Hospital_Name': None,
             'Hospital_lienced': False,
             'host':None
             }
         if setup_type=="FRESH":
+            file_location='\\'.join(converted_path)+"\software_information.json"
             try:
-                file_location='\\'.join(converted_path)+"\software_information.json"
-                _SOFTWARE_INFO_FILE_PATH=file_location                
+                # To set boot info json file.
                 with open(_SOFTWARE_INFO_FILE_PATH,'x') as fobj:
                     json.dump(info_dictionary,fobj,indent=6)
             except Exception as e:
                 return str(e)
         else:
-            _SOFTWARE_INFO_FILE_PATH=raw_file_location
+            file_location=raw_file_location
             
+        jsonfile=os.path.join(os.path.dirname(os.path.realpath(__file__)),'license_keys.json')
+        with open(jsonfile,'r') as jobj:
+            dictionary=json.load(jobj)
+            
+        dictionary['boot file path']=file_location
+        
+        with open(jsonfile,"w") as jobj:
+            json.dump(dictionary,jobj,indent=6)
+        
     
     @staticmethod
     def register_hospital_name(hospital_name:str):
@@ -79,11 +78,9 @@ class Software_setup:
         This function will be used inside 'setup software' file's 'register hospital name' frame. 
         This register hospital name        
         """
-        global _SOFTWARE_INFO_FILE_PATH
-        jsonfile=_SOFTWARE_INFO_FILE_PATH
+        jsonfile=boot_file
         with open(jsonfile,encoding='utf-8' ) as jsonobj:
             boot_info=json.load(jsonobj)
-        
         boot_info["Hospital_Name"]=hospital_name
         
         with open(jsonfile,'w',encoding='utf-8') as jsonobj:
@@ -103,6 +100,17 @@ class Software_setup:
             return E
         
         database_object.close()
+        
+        # Codes to set host value.
+        global boot_file
+        jsonfile=boot_file
+        with open(jsonfile,encoding='utf-8' ) as jsonobj:
+            boot_info=json.load(jsonobj)
+        
+        boot_info["host"]=data['host']
+        
+        with open(jsonfile,'w',encoding='utf-8') as jsonobj:
+            json.dump(boot_info,jsonobj,indent=6)
         return None
         
     
@@ -198,7 +206,7 @@ class _Database_setup:
         ID_proof VARCHAR(20) NOT NULL,
         ID_number VARCHAR(25) NOT NULL,
         registrer_ID VARCHAR(15) NOT NULL,
-        user_password VARCHAR(500) NOT NULL,
+        username VARCHAR(500) NOT NULL,
         login_status BOOLEAN NOT NULL
         );
         """
@@ -234,7 +242,7 @@ class _Database_setup:
         education VARCHAR(200) NOT NULL,
         post VARCHAR(20) NOT NULL,
         registrer_id VARCHAR(20) NOT NULL,
-        password VARCHAR(500) NOT NULL,
+        username VARCHAR(500) NOT NULL,
         login_status BOOLEAN NOT NULL,
         dept_id VARCHAR(20) NOT NULL,
         FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id),
@@ -259,7 +267,7 @@ class _Database_setup:
         contact2 double,
         education VARCHAR(100) NOT NULL,
         registrer_id VARCHAR(20) NOT NULL,
-        password VARCHAR(500) NOT NULL,
+        username VARCHAR(500) NOT NULL,
         login_status BOOLEAN NOT NULL,
         FOREIGN KEY (registrer_id) REFERENCES hospital_staff(staff_id)
         );
@@ -360,11 +368,10 @@ class _Database_setup:
         """
         return self._execute_query(query)
         
-    
-
 if __name__=='__main__':
     #key=input("Enter the license key:")
     #print(Software_setup.license_key_verification(key))
     #Software_setup.register_hospital_name(50)
     #print(Software_setup.setup_database(host='localhost',user='test',password='test',hospital_name="Testing"))
     print(_SOFTWARE_INFO_FILE_PATH)
+    pass

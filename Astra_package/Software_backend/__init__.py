@@ -2,7 +2,8 @@
 contains general functions of the backend.
 
 """
-
+from json import load
+import os
 
 from uuid import uuid4 
 
@@ -14,10 +15,12 @@ def ID_generator():
     return generated_id
 
 
-# Inside '_SOFTWARE_INFO_FILE_PATH' variable json file (containing basic info of software) path will be stored.
-_SOFTWARE_INFO_FILE_PATH=None
-
+# Inside '__SOFTWARE_INFO_FILE_PATH__' variable json file (containing basic info of software) path will be stored.
+jsonfile=os.path.join(os.path.dirname(os.path.realpath(__file__)),'license_keys.json')
+with open(jsonfile,'r') as jobj:
+    _SOFTWARE_INFO_FILE_PATH=load(jobj)['boot file path']
     
 if __name__=='__main__':
+    #print(_SOFTWARE_INFO_FILE_PATH)
     pass
     
