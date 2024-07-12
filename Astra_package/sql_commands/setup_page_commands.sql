@@ -153,4 +153,37 @@ registerer_id VARCHAR(20) NOT NULL,
 FOREIGN KEY (registerer_id) REFERENCES pharmacy_info(pharmacist_id)
 );
 
+/*---------------------- 11th command: To crate roles for user and delete them  -------------------------- */
+CREATE ROLE IF NOT EXISTS doctor;
+CREATE ROLE IF NOT EXISTS receptionist;
+CREATE ROLE IF NOT EXISTS lab_technician;
+CREATE ROLE IF NOT EXISTS pharmacist;
 
+DROP ROLE IF EXISTS doctor;
+DROP ROLE IF EXISTS receptionist;
+DROP ROLE IF EXISTS lab_technician;
+DROP ROLE IF EXISTS pharmacist;
+
+
+/*--------------------------- 12th command : Grant permission to users ----------------------------------*/
+GRANT ALL ON testingdatabase.* TO doctor;
+
+GRANT ALL ON testingdatabase.apponintment_list TO receptionist;
+GRANT ALL ON testingdatabase.doctors_list TO receptionist;
+GRANT ALL ON testingdatabase.pharmacy_info TO receptionist;
+GRANT ALL ON testingdatabase.patient_list TO receptionist;
+GRANT ALL ON testingdatabase.login_info TO receptionist;
+
+GRANT ALL ON testingdatabas.medicine_list TO pharmacist;
+
+GRANT ALL ON testingdatabase.* TO lab_technician;
+
+
+SHOW grants for receptionist;
+REVOKE ALL ON testingdatabase.doctors_list FROM receptionist;
+
+
+/*-------------------------- 13th command : To create users and delete them -------------------------------*/
+CREATE USER username IDENTIFIED BY 'password';
+
+drop user 'username';

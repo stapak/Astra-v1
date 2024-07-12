@@ -4,6 +4,7 @@ This file is for getting software ready with creating a database,cloud.
 
 # built-in libraries
 
+
 import os
 import mysql.connector
 import json
@@ -55,13 +56,17 @@ class Software_setup:
             file_location='\\'.join(converted_path)+"\software_information.json"
             try:
                 # To set boot info json file.
-                with open(_SOFTWARE_INFO_FILE_PATH,'x') as fobj:
+                with open(file_location,'x') as fobj:
                     json.dump(info_dictionary,fobj,indent=6)
             except Exception as e:
                 return str(e)
         else:
             file_location=raw_file_location
-            
+        
+        # Set boot file variable to boot file path. 
+        global boot_file
+        boot_file=file_location
+        
         jsonfile=os.path.join(os.path.dirname(os.path.realpath(__file__)),'license_keys.json')
         with open(jsonfile,'r') as jobj:
             dictionary=json.load(jobj)
