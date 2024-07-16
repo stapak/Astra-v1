@@ -15,9 +15,6 @@ class Window():
     """
     Creates window objects and sets basic settings 
     """
-    def __init__(self):
-        pass
-
     def _create_window(self):
         root =Tk()
         root.title('Astra Hospital Management-v1')
@@ -46,7 +43,9 @@ class Window():
         self.login_root=self._create_window()
         width=700
         height=500
-        self.login_root.geometry(f'{width}x{height}')
+        xpoint=400
+        ypoint=150
+        self.login_root.geometry(f'{width}x{height}+{xpoint}+{ypoint}')
         self.login_root.resizable(width=False,height=False)
         return self.login_root
 
@@ -61,7 +60,6 @@ class Window():
 
 
 if __name__=='__main__':
-      
       window_root=Window()
       #window_root=window_root.setup_window()
       #window_root=window_root.normal_window()
