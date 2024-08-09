@@ -15,7 +15,6 @@ class IT_head_functions:
     Class contains all the functions used by IT head.
     """
     
-        
     @staticmethod
     def execute_query(cursor_object,query)->str | bool:
         """
@@ -23,6 +22,7 @@ class IT_head_functions:
         """
         try:
             cursor_object.execute(query)
+            return cursor_object.fetchall()
         except Exception as e:
             return str(e)
         else:
@@ -35,6 +35,7 @@ class IT_head_functions:
         Function used to add departments available in hospital,this function uses id_generator function to generate id and uses that id in 
         query.
         """
+        FUNCTION_NAME='add departments'
         cursor_object=data['cursor object']
         dept_id=ID_generator()
         query=f"""
@@ -52,72 +53,38 @@ class IT_head_functions:
         """
         Function used to add hospital staff such as receptionist.
         """
+        FUNCTION_NAME='add hospital staff'
         cursor_object=data['cursor object']
-        dept_id=ID_generator()
-        query=f"""
-        INSERT INTO departments
-        (dept_id,dept_name,total_doctors)
-        VALUES
-        (
-        '{dept_id}','{data['department name']}',{data['total doctors']}
-        );
-        """
-        return IT_head_functions.execute_query(cursor_object,query)
-    
-    @staticmethod
-    def add_doctors_list(**data):
-        """
-        Function used to enter the doctors to the doctors list.
-        """
-        cursor_object=data['cursor object']
-        dept_id=ID_generator()
-        query=f"""
-        INSERT INTO departments
-        (dept_id,dept_name,total_doctors)
-        VALUES
-        (
-        '{dept_id}','{data['department name']}',{data['total doctors']}
-        );
-        """
-        return IT_head_functions.execute_query(cursor_object,query)
         
+   
     
     @staticmethod
     def add_pharmacy(**data):
         """
         Funcitons used to enter pharmacist to the list
         """
-        cursor_object=data['cursor object']
-        dept_id=ID_generator()
-        query=f"""
-        INSERT INTO departments
-        (dept_id,dept_name,total_doctors)
-        VALUES
-        (
-        '{dept_id}','{data['department name']}',{data['total doctors']}
-        );
-        """
-        return IT_head_functions.execute_query(cursor_object,query)
+        FUNCTION_NAME='add pharmacy'
         
-    
+
+
     @staticmethod
     def change_user_passwrod(**data):
         """
         Function used by IT to help other change their forgotten password.
         """
-        cursor_object=data['cursor object']
-        dept_id=ID_generator()
-        query=f"""
-        INSERT INTO departments
-        (dept_id,dept_name,total_doctors)
-        VALUES
-        (
-        '{dept_id}','{data['department name']}',{data['total doctors']}
-        );
-        """
-        return IT_head_functions.execute_query(cursor_object,query)
+        FUNCTION_NAME='change user password'
+       
 
-    
+    @staticmethod
+    def login_register(cursor_object):
+        """
+        Function used to retrive information of logged in users form login_info table and return.
+        """
+        FUNCTION_NAME='login register'
+        query="""
+            SELECT * FROM login_info;
+            """
+        return IT_head_functions.execute_query(cursor_object,query)
 
 if __name__=='__main__':
     import mysql.connector

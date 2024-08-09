@@ -17,7 +17,7 @@ class Window():
     """
     def _create_window(self):
         root =Tk()
-        root.title('Astra Hospital Management-v1')
+        root.title('Astra Hospital Management')
         window_icon=PhotoImage(file=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'software_icon.png'))
         root.iconphoto(False,window_icon)
         return root
@@ -48,8 +48,7 @@ class Window():
         self.login_root.geometry(f'{width}x{height}+{xpoint}+{ypoint}')
         self.login_root.resizable(width=False,height=False)
         return self.login_root
-
-
+    
 
    
 
@@ -63,7 +62,8 @@ if __name__=='__main__':
       window_root=Window()
       #window_root=window_root.setup_window()
       #window_root=window_root.normal_window()
-      window_root=window_root.login_window()
+      #window_root=window_root.login_window()
+      window_root=window_root.DataBase_window()
       window_root.mainloop()
       
       

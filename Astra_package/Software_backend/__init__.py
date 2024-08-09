@@ -1,6 +1,8 @@
 """
 contains general functions of the backend.
-
+rules of backend function:
+*Every function must specify input and output of it in discription.
+*Every fucntion must have it's name stored in variable 'FUCNTION NAME'.
 """
 from json import load
 import os

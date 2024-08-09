@@ -3,6 +3,7 @@ This file contains all the information regarding working of software and code di
 ## Package structure
 * Software is executed from ***Software_execution.py*** file that imports all funtions from ***astra package*** which contains all the source code of the software.
 * Astra package codes are further divided into sub-packages and moudle files.
+* Every functions,frame class in the package have variable function name and frame name containg name of function stored in string format.
 * Astra package structure:
 
 		Astra v1/
@@ -57,7 +58,7 @@ Subpackage contains all the module necessary for backend functioning of software
 	
 ***
 # Working of software Step-by-step.
-### working of setup:
+### Working of setup:
 Setup is used to setup the software and setup database.
 
 	* Firstly,setup greets the user and shows agreement and terms of use of the software.
@@ -65,7 +66,10 @@ Setup is used to setup the software and setup database.
 	* In next step user is asked for new setup or recover from previous setup.
 	* If it is new setup user is asked for a directory to store the basic info file or if it s old setup then basic info file location is asked.
  
+### Working of User Frame:
+User frame are initialized from specific directories based on the user role.
 
+	*At the start of software after checking the username and role of the user specific frames are initialized into the 
 
 
 

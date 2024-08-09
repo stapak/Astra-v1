@@ -36,7 +36,6 @@ import os
 import time
 
 # My liabraries
-from .software_windows import Window
 
 #---------------------------------------Variable/attributes of file ---------------------------------------
 
@@ -706,7 +705,8 @@ class setup_finish_page(BaseSetupPage):
 
 if __name__=='__main__':
     # Frame Verification tests.
-    
+    from .software_windows import Window
+
     class testing_switch_pages:
         @staticmethod
         def switch_front():

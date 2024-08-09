@@ -141,7 +141,10 @@ FOREIGN KEY (patient_id) REFERENCES patient_list(patient_id)
 );
 /*-----------------------------------------------------------------------------*/
 
-/*------------------- 10th command : To create medicine table --------------------------------------------------------------------------------------*/
+
+
+-- 10th command : To create medicine table
+
 CREATE TABLE medicine_list(
 medicine_id VARCHAR(20) NOT NULL,
 medicine_name VARCHAR(100) NOT NULL,
