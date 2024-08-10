@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------BACKEND commads---------------------------------------------------*/
 /*-------------------------------1st commad : to create database with name of hospital,-----------------------*/
 CREATE DATABASE dummy_hospital;
-
+drop database dummy_hospital;
 /*-------------------------------2nd commad: To use the database,---------------------------------------------*/
 USE  dummy_hospital;
 
@@ -31,6 +31,7 @@ doctor_id VARCHAR(20) PRIMARY KEY,
 name VARCHAR(50) NOT NULL,
 ID_proof VARCHAR(30) NOT NULL,
 id_no VARCHAR(30) NOT NULL,
+gender VARCHAR(10) NOT NULL,
 current_address VARCHAR(200) NOT NULL,
 permanent_address VARCHAR(200) NOT NULL,
 contact INT NOT NULL,
@@ -102,14 +103,8 @@ blood_group VARCHAR(3) NOT NULL,
 gender VARCHAR(10) NOT NULL,
 contact_no INT NOT NULL,
 contact_no2 INT,
-house_no VARCHAR(10) NOT NULL,
-building_name VARCHAR(10) NOT NULL,
-land_mark varchar(10) NOT NULL,
-town VARCHAR(20) NOT NULL,
-district VARCHAR(20) NOT NULL,
-state VARCHAR(20) NOT NULL,
-contry VARCHAR(20) NOT NULL,
-pincode INT NOT NULL,
+current_address VARCHAR(2000) NOT NULL,
+permanent_address VARCHAR(2000) NOT NULL,
 initial_problem VARCHAR(200) NOT NULL,
 initial_diagnose VARCHAR(500) NOT NULL,
 department_id VARCHAR(20) NOT NULL,
@@ -190,3 +185,6 @@ REVOKE ALL ON testingdatabase.doctors_list FROM receptionist;
 CREATE USER username IDENTIFIED BY 'password';
 
 drop user 'username';
+
+ALTER TABLE doctors_list
+ADD COLUMN GENDER VARCHAR(10) NOT NULL;

@@ -26,4 +26,25 @@ def login(**data):
     cursor_object=database_object.cursor()
     return cursor_object
     
+def get_departments(cursor_object):
+    """
+    This funciton is used to get the list of the department
+    INPUT:
+    *cursor_object: object of the cursor for executing query.
+    
+    OUTUPUT:
+    returns all the name of the departments in formated list .
+    """
+    query="""
+    select dept_name from departments;
+    """
+    cursor_object.execute(query)
+    dept_names=[]
+    for i in cursor_object.fetchall():
+        dept_names.append(i[0])
+    return dept_names
+
+
+
+    
     
