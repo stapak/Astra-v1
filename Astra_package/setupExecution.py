@@ -91,6 +91,7 @@ def start_setup():
     setup_page_5=setup_frames.Name_registration_page(window_object,SwitchPages,register_name=mediator_function_5th)
     
     #Initializing 6th page
+
     user_data={}
     def mediator_function_6th(id,password,host):
         global user_data
@@ -130,9 +131,9 @@ def start_setup():
     
     window_object.mainloop()
     
-    
-    
+ 
 
+        
     
 
 if __name__=='__main__':
