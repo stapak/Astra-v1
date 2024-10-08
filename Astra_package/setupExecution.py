@@ -14,12 +14,12 @@ import mysql.connector
 #-------------------------- Astra modules ------------------------------------------
 
 # Backend Modules 
-from .Software_backend.software_setup import Software_setup
-from . import frames_list
+from .Software_backend.Setup_Backend import Software_setup
+
 
 
 #Frontend Modules 
-from .Software_UI import setup_frames
+from .Software_UI import Setup_Frames as setup_frames
 from .Software_UI.software_windows import Window
 
 
@@ -32,9 +32,9 @@ Created a common frames list which is base for all software function depending o
 added to this list by other function.
 
 """
-
-
+frames_list=[]
 current_page=0
+
 class SwitchPages:
     """
     This class contains functions used to switch between pages.
@@ -138,4 +138,4 @@ def start_setup():
 
 if __name__=='__main__':
     start_setup()
-    pass
+    

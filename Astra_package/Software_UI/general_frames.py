@@ -39,6 +39,12 @@ class LoginPage(Frame):
    
     """
     def __init__(self,window_object,login_function,destroy_frame):
+        """
+        Object initialization of the class takes :
+        *object of tkinter's tk class.
+        *a function to login user.
+        *
+        """
         super().__init__(master=window_object,width=700,height=500)
         self.place(x=0,y=0)
         
@@ -60,6 +66,9 @@ class LoginPage(Frame):
             """
             Function used to check the characters of the user credentials. 
             """
+            if user_name_variable.get().lower() == 'root' :
+                messagebox.showerror("Astra Says","Root Id can be only used on SQL server.")
+                return False
             banned_characters=['"',"'"]
             for i in user_name_variable.get():
                 if i in banned_characters:

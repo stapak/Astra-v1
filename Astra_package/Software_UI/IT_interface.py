@@ -242,6 +242,8 @@ class ITAddUser(ITBaseFrame):
         INPUT
        
     """
+    FRAME_NAME="ITAddUser"
+    
     def __init__(self,window_object):
         super().__init__(window_object)
         

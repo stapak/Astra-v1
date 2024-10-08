@@ -4,8 +4,3 @@ sub-packages of the frame
 """
 __all__=[]
 
-
-
-
-# This list is used for storing all the objects of the frame.
-frames_list=[]
