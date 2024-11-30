@@ -30,7 +30,7 @@ import os
 import time
 
 # My liabraries
-from software_windows import Window
+from .software_windows import Window
 
 #---------------------------------------------- Varibales of frames-------------------------------------------------
 blue_background="#7CB9E8"

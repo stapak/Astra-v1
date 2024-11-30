@@ -1,3 +1,4 @@
+/*
 insert into pharmacy_info
 value
 ('testing1','Adhar card','234134213','stefe','werwer',8088123098,8088123098,"bhd",);
@@ -15,3 +16,10 @@ drop foreign key login_info_ibfk_3;
 
 alter table login_info
 add column user_id varchar(20) not null;
+
+*/
+
+create role it;
+
+grant all on testingdatabase.* to IT;
+select CURRENT_ROLE();

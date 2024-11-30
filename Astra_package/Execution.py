@@ -11,6 +11,7 @@ import json
 
 from .Software_backend.projectExceptions import WrongUserInformation,HostError
 from .setupExecution import start_setup
+from .userLogin import ShowLoginPage
 
 
 #------------------ Variables to be used in other modules of the package  -------------------
@@ -52,4 +53,4 @@ def Execute():
     if not _SOFTWARE_INFO_FILE_PATH:
         start_setup()
     else:
-        pass
+        ShowLoginPage()

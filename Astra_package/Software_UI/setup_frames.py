@@ -626,7 +626,7 @@ class DBMS_setup_page(BaseSetupPage):
         
             dbms_status=dbms_setup_function()
             progress_percent=10
-            for i in dbms_status:
+            for i in range(len(dbms_status)):
                 if dbms_status[i]:
                     progressbar_object['value']=progress_percent
                     progressbar_object.update_idletasks()

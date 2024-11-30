@@ -5,6 +5,7 @@ File contains all the frames class related to IT interface.
 
 
 
+from math import dist
 from time import sleep
 from threading import Thread
 
@@ -45,6 +46,9 @@ class IT_Base():
         def database_workspace():
             workspace_widget=IT_Database_Workspace(window_object,function_list['execute query'])
             
+        def adduser_setting():
+            add_user_object=ITAddUser(window_object).tkraise()
+            
         #---------------------------------------------------------------------- Menu Bar --------------------------------------------------
         main_menu=Menu(master=window_object)
         
@@ -64,7 +68,7 @@ class IT_Base():
         
         # User related options
         user_menu=Menu(master=edit_submenu,tearoff=0)
-        user_menu.add_command(label="Add user",command=None)   
+        user_menu.add_command(label="Add user",command=adduser_setting)   
         user_menu.add_command(label="remove user",command=None)
         user_menu.add_command(label="Edit user",command=None)
 
@@ -109,7 +113,7 @@ class ITBaseFrame(Frame):
     """
     BaseClass for all IT frame classes.It initializes height widht and menubar of the frame.
     """
-    def __init__(self,window_object,backend_functions=None):
+    def __init__(self,window_object,backend_functions:dict=None):
         super().__init__(window_object,bg="light grey",width=1535,height=775)
         self.place(x=0,y=0)
         IT_Base.menubar_setup(window_object,backend_functions)
@@ -120,10 +124,13 @@ class ITBaseFrame(Frame):
 class ITDashBoard(ITBaseFrame):
     """
     Class containing frame for dash board of IT head.
+    Arguments taken:
+    * window_object - object of tk class .
+    * backend_functions -  Dictionay of fuction used in backend.
     """
     FRAME_NAME="ITDashBoard"
     
-    def __init__(self,window_object,backend_functions=None):
+    def __init__(self,window_object,backend_functions:dict=None):
         super().__init__(window_object,)
        
 
@@ -137,7 +144,7 @@ class ITDashBoard(ITBaseFrame):
             """
             the function that calls it self to update the login register,this function works on a thread.
             """
-            display_input=backend_functions['login register']()
+            display_input=backend_functions['login register'](backend_functions['cursor object'])
             
             login_listbox.insert(0,"User Name                                                    | login time                                                                  | logout time                                                      | Status                        ")
             for i in display_input:

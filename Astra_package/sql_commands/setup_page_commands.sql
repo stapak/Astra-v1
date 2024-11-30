@@ -156,15 +156,19 @@ CREATE ROLE IF NOT EXISTS doctor;
 CREATE ROLE IF NOT EXISTS receptionist;
 CREATE ROLE IF NOT EXISTS lab_technician;
 CREATE ROLE IF NOT EXISTS pharmacist;
+CREATE ROLE IF NOT EXISTS IT;
 
 DROP ROLE IF EXISTS doctor;
 DROP ROLE IF EXISTS receptionist;
 DROP ROLE IF EXISTS lab_technician;
 DROP ROLE IF EXISTS pharmacist;
+DROP ROLE IF NOT EXISTS IT;
 
 
 /*--------------------------- 12th command : Grant permission to users ----------------------------------*/
 GRANT ALL ON testingdatabase.* TO doctor;
+
+GRANT ALL ON testingdatabas.* TO IT;
 
 GRANT ALL ON testingdatabase.apponintment_list TO receptionist;
 GRANT ALL ON testingdatabase.doctors_list TO receptionist;

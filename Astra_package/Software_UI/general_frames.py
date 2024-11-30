@@ -100,6 +100,7 @@ class LoginPage(Frame):
             if self.login_status:
                 show_progressbar_thread.join()
                 destroy_frame()
+                sys.exit()
                
             else:
                 messagebox.showerror("Astra Says","Login Failed !")
@@ -131,7 +132,7 @@ class LoginPage(Frame):
                          time.sleep(0.5)
                     else:
                         i=0
-            sys.exit()
+            return 
         
         def forgot_password(element):
             """
@@ -152,7 +153,7 @@ class LoginPage(Frame):
         name_label=Label(master=name_frame,text=HOSPITAL_NAME,background=BACKGROUND_COLOR,font=("Arial",15))
         name_label.place(x=100,y=220)
         
-        #-------------------- 2nd Frame: Entry Frame ---------------------------------------------------\
+        #-------------------- 2nd Frame: Entry Frame ---------------------------------------------------
         entry_frame=Frame(self,width=700,height=200,background=BACKGROUND_COLOR)
         entry_frame.place(x=0,y=301)
         
