@@ -4,7 +4,9 @@ This file contains frames related to all the work of the receptionist.
 """
 
 # tkinter libraries
-from tkinter import  Frame, LabelFrame, Place
+
+
+from tkinter import Frame, LabelFrame, Place
 from tkinter import Label
 from tkinter import Button
 from tkinter import Radiobutton
@@ -19,8 +21,8 @@ from tkinter import messagebox
 from tkinter.ttk import Checkbutton 
 from tkinter.ttk import Entry 
 from tkinter import Scrollbar
-from tkinter.ttk import Button as Button2
 from tkinter.ttk import Combobox
+
 
 
 # Other liabraries
@@ -30,15 +32,15 @@ import os
 import time
 
 # My liabraries
-from .software_windows import Window
+from software_windows import Window
 
 #---------------------------------------------- Varibales of frames-------------------------------------------------
 blue_background="#7CB9E8"
 grey_background="light grey"
 base_height=780
 base_width=1535
-HOSPITAL_NAME=None
-
+HOSPITAL_NAME="Testing 123"
+USER_NAME="TEsting 456"
 
 #----------------------------------------------- Frames of windows---------------------------------------------------
 class BaseReceptionFrame(Frame):
@@ -55,11 +57,70 @@ class BaseReceptionFrame(Frame):
 
 
 
-class Dashboard(BaseReceptionFrame):
-    pass
+class ReceptionDashboard(BaseReceptionFrame):
+    """
+    This Class is used to build the dashboard for the receptionist.    
+    """
+    def __init__(self, window_object,function_dictionary=None):
+        super().__init__(window_object)
+        global USER_NAME
+
+        #------------------------------- Functions used by button --------------------------------------------------------------------------
+        def logout_function():
+            """
+            Funtion to ask confirmation and call 'logout' function.
+            """
+            confirmation=messagebox.askyesno(title="Astra Asks",message="Do you realy want to quit?")
+            if confirmation:
+                self.destroy()
+                function_dictionary['logout']()
+            else:
+                pass
+        
+        def add_appointment():
+            pass
+        
+        def register_patient():
+            """
+            Function used to create object of "register patient" frame and rise it above "dashboard frame".
+            
+            """
+            RegisterPatient(window_object).tkraise()
+            
+        def view_appointment():
+            pass
+        
+        def edit_appointment():
+            pass
+        
+        #------------------------------------------------------- Left Panel of the dashboard. -------------------------------------------------
+        left_panel=Frame(master=self,height=730,width=500,background="white")
+        left_panel.place(x=0,y=51)
+        
+        logout_button=Button(master=self,text="logout",font=("Arial",15),command=logout_function)
+        logout_button.place(x=1420,y=4,width=100)
+        
+        greeting_label=Label(master=left_panel,text=f"Welcome,{USER_NAME}",font=("Arial",25),background="white")
+        greeting_label.place(x=0,y=100,)
+        add_appointment_Button=Button(master=left_panel,text="Add Appointment",font=("Arial",25),background=grey_background,command=add_appointment)
+        add_appointment_Button.place(y=250,x=5,width=490)
+        
+        register_appointment_Button=Button(master=left_panel,text="Register Patients",font=("Arial",25),background=grey_background,command=register_patient)
+        register_appointment_Button.place(y=320,x=5,width=490)
+        
+        view_appointment_Button=Button(master=left_panel,text="View Patients",font=("Arial",25),background=grey_background,command=view_appointment)
+        view_appointment_Button.place(y=390,x=5,width=490)
+        
+        edit_appointment_Button=Button(master=left_panel,text="Edit Patient details",font=("Arial",25),background=grey_background,command=edit_appointment)
+        edit_appointment_Button.place(y=460,x=5,width=490)
 
 
-
+        #------------------------------------------------------- Right Panel --------------------------------------------------------------
+        right_panel=Frame(master=self,height=730,width=1034,)
+        right_panel.place(x=501,y=51)
+        Label(master=right_panel,text="Right panel",background="red").place(x=20,y=20)
+        appointment_register_frame=LabelFrame(master=right_panel,background='blue',height=340,width=700)
+        appointment_register_frame.place(x=50,y=50)
 
 
 class RegisterPatient(BaseReceptionFrame):
@@ -69,7 +130,24 @@ class RegisterPatient(BaseReceptionFrame):
     def __init__(self, window_object,register_patient=None):
         super().__init__(window_object)
         
-        #-------------------------------------------------------Patient personal Information Frame -------------------------------------------
+        #-------------------------------------------------------Function of the frame ----------------------------------------------------
+
+        def register_function():
+            pass
+        
+        def discard_function():
+            confirmation=messagebox.askyesno("Astra Asks","Do you want to discard patient details?")
+            if confirmation:
+                self.destroy()
+            else:
+                pass
+        
+        register_button=Button(master=self,text="Discard",font=("Arial",15),activebackground='red',command=discard_function)
+        register_button.place(x=1310,y=4,width=100)
+        
+        discard_button=Button(master=self,text="Register",font=("Arial",15),activebackground='green',command=register_function)
+        discard_button.place(x=1420,y=4,width=100)
+        #-------------------------------------------------------Patient personal Information Frame ----------------------------------------
         personal_info_frame=LabelFrame(master=self,height=125,width=1535,text="Patient Personal Information",borderwidth=2,relief="groove")
         personal_info_frame.place(x=0,y=51)
         
@@ -134,6 +212,7 @@ class RegisterPatient(BaseReceptionFrame):
         
         
         #----------------------------------Second Line-----------------
+
         gender_label=Label(master=personal_info_frame,text="Gender:",font=basic_font)
         gender_label.place(x=5,y=55)
         gender_combox=Combobox(master=personal_info_frame,width=14,font=basic_font,textvariable=gender_variable)
@@ -468,7 +547,11 @@ class RegisterPatient(BaseReceptionFrame):
         
     
 
-class SessionBooking(BaseReceptionFrame):
+class AddAppointment(BaseReceptionFrame):
+    """
+    Frame is used to contain elements of the 
+    """
+    
     pass
         
 
@@ -483,9 +566,7 @@ if __name__=='__main__':
     root=window.normal_window()
     
     #base_class_object=BaseReceptionFrame(root)
-     
-    
-    add_object=RegisterPatient(root)
-
+    #add_object=RegisterPatient(root)
+    testing_dashboard=ReceptionDashboard(root)
     root.mainloop()
     

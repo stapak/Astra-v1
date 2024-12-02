@@ -18,7 +18,8 @@ This file contains all the information regarding working of software and code di
 		  |
 		  |-----Astra_package/
 		           |-----__init__.py
-		           |								               |-----software_boot_function.py
+		           |							
+	               |-----software_boot_function.py
 	               |
 		           |-----Software_backend/
 		           |
@@ -57,7 +58,7 @@ This subpackage contains all the user interface module which are built through t
 Subpackage contains all the module necessary for backend functioning of software such as communicating with database, or other works.	
 	
 ***
-# Working of software Step-by-step.
+# Structure of software and execution.
 ### Working of setup:
 Setup is used to setup the software and setup database.
 
@@ -69,7 +70,7 @@ Setup is used to setup the software and setup database.
 ### Working of User Frame:
 User frame are initialized from specific directories based on the user role.
 
-	*At the start of software after checking the username and role of the user specific frames are initialized into the 
-
-
+	* At the start of software after checking the username and role of the user specific frames are initialized into the 
+	* All logout function for the respective user are in their respective file logout funciton of the user destroys the frame objects created, 
+	  later window object and  cursor object are destroyed in the files where backend and frontend are linked.
 
