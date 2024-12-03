@@ -6,7 +6,7 @@ This file contains the general frames used by every user.
 import json
 import sys
 import time
-from tkinter import Button, Frame, Label, StringVar, messagebox 
+from tkinter import Button, Frame, Label, Listbox, Scrollbar, StringVar, Toplevel, messagebox 
 import tkinter as tk
 #from ..AstraThreads import AstraThread
 from multiprocessing import Process
@@ -14,6 +14,8 @@ from threading import Thread
 
 from tkinter.ttk import Entry
 from tkinter.ttk import Progressbar
+
+
 
 
 
@@ -196,8 +198,72 @@ class LoginPage(Frame):
         
         
         
-
+class BaseSearchWindow(Toplevel):
+    """
+    This class represents search box for queriying through any of table.
+    
+    """
+    USER_SELECTED_VALUE=None
+    def __init__(self,window_object,window_title=None|str ,search_function = None):
+        super().__init__(window_object,background=BACKGROUND_COLOR)
+        width=600
+        height=725
+        xpoint=470
+        ypoint=50
+        self.geometry(f'{width}x{height}+{xpoint}+{ypoint}')
+        self.resizable(width=False,height=False)
         
+        # Variable Declaration
+        pageTitle=tk.StringVar()
+        pageTitle.set(window_title)
+        search_variable=tk.StringVar()
+        
+        # Function Defination
+        def search():
+            """
+            The function is used to use backend funtion and get the list of similar strings.
+            """
+            search_keyword=search_variable.get()
+            output_list=search_function(search_keyword)
+            for output in output_list:
+                result_listbox.insert(tk.END,output)
+        
+        def select(trash):
+            """
+            This function is used to change the frame according to the desired frame once user clicks on any of the options inside the Listbox.
+            this takes trash as arguments but as bind funtion passes some arguments when it calls the function.
+            """
+            selected_index=result_listbox.curselection()
+            self.USER_SELECTED_VALUE=result_listbox.get(selected_index)
+            
+            
+        # Widgets of the frame.
+        page_title_label=Label(master=self,textvariable=pageTitle,font=("Arial",25),background="light blue")
+        page_title_label.place(x=0,y=10,width=600)
+        
+        search_label=Label(master=self,text="Search:",font=("Arial",15),background=BACKGROUND_COLOR)
+        search_label.place(x=10,y=80)
+        
+        search_entry=Entry(master=self,textvariable=search_variable,font=("Arial",15))
+        search_entry.place(x=85,y=80,width=350)
+        
+        search_button=Button(master=self,text="Search",font=("Arial",10),command=search)
+        search_button.place(x=450,y=80,width=100)
+        #------------------------------------------------------------ 
+        result_label=Label(master=self,text="Results",font=('Arial',15),background=BACKGROUND_COLOR)
+        result_label.place(x=10,y=120)
+        
+        columns_name_label=Label(master=self,text="Names\t\t\t\t\tID",font=('Arial',15),background=BACKGROUND_COLOR)
+        columns_name_label.place(x=25,y=150)
+        
+        result_scrollbar=Scrollbar(master=self,orient='vertical')
+        result_scrollbar.place(x=560,y=180,height=532)
+        
+        result_listbox=Listbox(master=self,width=88,height=33,yscrollcommand=result_scrollbar.set)
+        result_listbox.place(x=25,y=180)
+        
+        result_scrollbar.config(command=result_listbox.yview)
+        result_listbox.bind('<<ListboxSelect>>',select)
         
         
 
@@ -205,10 +271,20 @@ if __name__=='__main__':
     from software_windows import Window
     root=Window()
     root=root.login_window()
+    
+    """
     def login(**data):
         return True
     def destroy():
         root.destroy()
         sys.exit()
     frame_root=LoginPage(root,login,destroy)
+    """
+    def testing1(test):
+        return ['1','2','3','4\\']    
+    testing=BaseSearchWindow(root,"sample testing",testing1)
+    
     root.mainloop()
+    testing.mainloop()
+    
+    print(testing.USER_SELECTED_VALUE)
