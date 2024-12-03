@@ -201,7 +201,7 @@ class LoginPage(Frame):
 class BaseSearchWindow(Toplevel):
     """
     This class represents search box for queriying through any of table.
-    
+    This is just base class it needs to optimised for every single user interface for which this class will be used.
     """
     USER_SELECTED_VALUE=None
     def __init__(self,window_object,window_title=None|str ,search_function = None):
